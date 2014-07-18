@@ -9,6 +9,7 @@ public class GraphicsTestActionListener implements ActionListener{
 	}
 	public void actionPerformed(ActionEvent e){
 		gt.draw();
+		gt.update();
 		t += 1;
 	}
 }
