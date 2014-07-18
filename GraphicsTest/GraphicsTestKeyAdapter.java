@@ -7,17 +7,9 @@ public class GraphicsTestKeyAdapter extends KeyAdapter{
 		this.gt = gt;
 	}
 	public void keyReleased(KeyEvent e){
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			gt.setRightArrowKeyPressed(false);
-		}
-		
+		gt.setKeyReleased(e.getKeyCode());
 	}
 	public void keyPressed(KeyEvent e){
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			gt.setRightArrowKeyPressed(true);
-		}		
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			gt.setRunning(false);
-		}
+		gt.setKeyPressed(e.getKeyCode());
 	}
 }

@@ -5,6 +5,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.Set;
+import java.util.HashSet;
 
 public class GraphicsTest extends Frame {
 
@@ -12,10 +14,11 @@ public class GraphicsTest extends Frame {
 	private int y = 0;
 	private boolean rightArrowKeyPressed = false;
 	private boolean running = false;
+	private Set<Integer> keysPressed = new HashSet<Integer>();
 
 	public GraphicsTest(){
 		this.setBackground(new Color(0x38,0x8E,0x8E));
-        this.addWindowListener(new GraphicsTestWindowAdapter());
+        this.addWindowListener(new GraphicsTestWindowAdapter(this));
         this.addKeyListener(new GraphicsTestKeyAdapter(this));
         this.setSize(320, 240);
         this.setUndecorated(true);
@@ -31,19 +34,34 @@ public class GraphicsTest extends Frame {
 		this.running = running;
 	}
 
-	public void setRightArrowKeyPressed(boolean rightArrowKeyPressed){
-		this.rightArrowKeyPressed = rightArrowKeyPressed;
-	}
-
 	public void update() {
-		if(running == false) {
-			System.exit (0);
+		if(keysPressed.contains(KeyEvent.VK_ESCAPE)) {
+			running = false;
 		}
-		if(rightArrowKeyPressed == true) {
+		if(keysPressed.contains(KeyEvent.VK_RIGHT)) {
 			x++;
+		}
+		if(keysPressed.contains(KeyEvent.VK_LEFT)) {
+			x--;
+		}
+		if(keysPressed.contains(KeyEvent.VK_DOWN)) {
+			y++;
+		}
+		if(keysPressed.contains(KeyEvent.VK_UP)) {
+			y--;
+		}
+		if(running == false) {
+			System.exit(0);
 		} 
 	}
 
+	public void setKeyPressed(int keyCode) {
+		keysPressed.add(keyCode);
+	}
+
+	public void setKeyReleased(int keyCode) {
+		keysPressed.remove(keyCode);
+	}
 	private void clearScreen(Graphics g){
 		g.setColor(Color.BLACK);
 		g.fillRect(0,0,320,240);
