@@ -22,6 +22,7 @@ public class GraphicsTest extends Frame {
 	private boolean bulletFired = false;
 	private int x = 0;
 	private int y = 0;
+    private int direction = 0;
 	private boolean rightArrowKeyPressed = false;
 	private boolean running = false;
 	private Set<Integer> keysPressed = new HashSet<Integer>();
@@ -56,18 +57,33 @@ public class GraphicsTest extends Frame {
 		}
 		if(keysPressed.contains(KeyEvent.VK_RIGHT)) {
 			x++;
+            direction = 1;
 		}
 		if(keysPressed.contains(KeyEvent.VK_LEFT)) {
 			x--;
+            direction = 3;
 		}
 		if(keysPressed.contains(KeyEvent.VK_DOWN)) {
 			y++;
+            direction = 2;
 		}
 		if(keysPressed.contains(KeyEvent.VK_UP)) {
 			y--;
+            direction = 0;
 		}
 		if(keysPressed.contains(KeyEvent.VK_W) && !previousKeysPressed.contains(KeyEvent.VK_W)) {
-			bullets.add(new Bullet(bulletSprite, x+11, y-13));
+            if (direction == 0) {
+                bullets.add(new Bullet(bulletSprite, x+11, y-13, direction));
+            }
+            if (direction == 1) {
+                bullets.add(new Bullet(bulletSprite, x+32, y+11, direction));
+            }
+            if (direction == 2) {
+                bullets.add(new Bullet(bulletSprite, x+11, y+32, direction));
+            }
+            if (direction == 3) {
+                bullets.add(new Bullet(bulletSprite, x-13, y+11, direction));
+            }
 		}
 		for(Bullet bullet : bullets){
 			bullet.update();			
