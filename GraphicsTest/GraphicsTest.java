@@ -7,16 +7,32 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.Set;
 import java.util.HashSet;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GraphicsTest extends Frame {
 
+	private BufferedImage bulletSprite;
+	private int bulletY;
+	private int bulletX;
+	private boolean bulletFired = false;
 	private int x = 0;
 	private int y = 0;
 	private boolean rightArrowKeyPressed = false;
 	private boolean running = false;
 	private Set<Integer> keysPressed = new HashSet<Integer>();
+	private Set<Integer> previousKeysPressed = new HashSet<Integer>();
+	private List<Bullet> bullets = new ArrayList<Bullet>();
 
 	public GraphicsTest(){
+		try {
+    		bulletSprite = ImageIO.read(new File("bulletsprites.png"));
+		} catch (IOException e) {
+		}
 		this.setBackground(new Color(0x38,0x8E,0x8E));
         this.addWindowListener(new GraphicsTestWindowAdapter(this));
         this.addKeyListener(new GraphicsTestKeyAdapter(this));
@@ -50,9 +66,22 @@ public class GraphicsTest extends Frame {
 		if(keysPressed.contains(KeyEvent.VK_UP)) {
 			y--;
 		}
+		if(keysPressed.contains(KeyEvent.VK_W) && !previousKeysPressed.contains(KeyEvent.VK_W)) {
+			bullets.add(new Bullet(bulletSprite, x+11, y-13));
+		}
+		for(Bullet bullet : bullets){
+			bullet.update();			
+		}
+
+
 		if(running == false) {
 			System.exit(0);
-		} 
+		}
+		previousKeysPressed.clear();
+		for(Integer keyCode : keysPressed) {
+			previousKeysPressed.add(keyCode);
+		}
+
 	}
 
 	public void setKeyPressed(int keyCode) {
@@ -67,8 +96,6 @@ public class GraphicsTest extends Frame {
 		g.fillRect(0,0,320,240);
 	}
 	public void draw(){
-		//x++;
-		//y += 2;
 		BufferStrategy bf = this.getBufferStrategy();
 		Graphics g = null;
 		try {
@@ -76,6 +103,9 @@ public class GraphicsTest extends Frame {
 			clearScreen(g);
 			g.setColor(new Color(0x00,0xEE,0x00));
 			g.fillRect(x,y,32,32);
+			for(Bullet bullet : bullets) {
+				bullet.draw(g);
+			}
 		} finally {
 			g.dispose();
 		}
