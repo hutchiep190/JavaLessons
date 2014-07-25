@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GraphicsTest extends Frame {
 
@@ -27,7 +28,6 @@ public class GraphicsTest extends Frame {
 	private Set<Integer> keysPressed = new HashSet<Integer>();
 	private Set<Integer> previousKeysPressed = new HashSet<Integer>();
 	private List<Bullet> bullets = new ArrayList<Bullet>();
-
 	public GraphicsTest(){
 		try {
     		bulletSprite = ImageIO.read(new File("bulletsprites.png"));
@@ -41,9 +41,9 @@ public class GraphicsTest extends Frame {
         this.setVisible(true);
         this.createBufferStrategy(2);
 
-        Timer t = new Timer(20, new GraphicsTestActionListener(this));
+        Timer timer = new Timer(20, new GraphicsTestActionListener(this));
         running = true;
-        t.start();
+        timer.start();
 	}
 
 	public void setRunning(boolean running){
@@ -51,6 +51,17 @@ public class GraphicsTest extends Frame {
 	}
 
 	public void update() {
+		for(int i = 0; i < bullets.size(); i++) {
+			Bullet bullet = bullets.get(i);
+			if(bullet == null){
+				continue;
+			}
+			if(bullet.getX() > 640 || bullet.getX() < -320 || bullet.getY() > 480 || bullet.getY() < -240) {
+				bullets.set(i, null);
+			}
+		}
+		bullets.removeAll(Collections.singleton(null));
+
 		if(keysPressed.contains(KeyEvent.VK_ESCAPE)) {
 			running = false;
 		}
@@ -79,7 +90,7 @@ public class GraphicsTest extends Frame {
 			bullets.add(new Bullet(bulletSprite, x+32, y+11, 3));
 		}
 		for(Bullet bullet : bullets){
-			bullet.update();			
+			bullet.update();
 		}
 		if(running == false) {
 			System.exit(0);
@@ -88,7 +99,6 @@ public class GraphicsTest extends Frame {
 		for(Integer keyCode : keysPressed) {
 			previousKeysPressed.add(keyCode);
 		}
-
 	}
 
 	public void setKeyPressed(int keyCode) {

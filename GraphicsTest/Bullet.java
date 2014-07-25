@@ -31,6 +31,12 @@ public class Bullet {
 	private void drawSprite(Graphics g, int width, int height, int sourceX, int sourceY) {
 		g.drawImage(image, x, y, x+width, y+height, sourceX, sourceY, sourceX+width, sourceY+height, null);
 	}
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
 	public void draw(Graphics g){
 		if(direction == 0) {
 			drawSprite(g, 10, 13, 142, 197);
