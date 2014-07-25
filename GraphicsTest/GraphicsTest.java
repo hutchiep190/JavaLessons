@@ -67,13 +67,20 @@ public class GraphicsTest extends Frame {
 			y--;
 		}
 		if(keysPressed.contains(KeyEvent.VK_W) && !previousKeysPressed.contains(KeyEvent.VK_W)) {
-			bullets.add(new Bullet(bulletSprite, x+11, y-13));
+			bullets.add(new Bullet(bulletSprite, x+11, y-13, 0));
+		}
+		if(keysPressed.contains(KeyEvent.VK_A) && !previousKeysPressed.contains(KeyEvent.VK_A)) {
+			bullets.add(new Bullet(bulletSprite, x-13, y+11, 1));
+		}
+		if(keysPressed.contains(KeyEvent.VK_S) && !previousKeysPressed.contains(KeyEvent.VK_S)) {
+			bullets.add(new Bullet(bulletSprite, x+11, y+32, 2));
+		}
+		if(keysPressed.contains(KeyEvent.VK_D) && !previousKeysPressed.contains(KeyEvent.VK_D)) {
+			bullets.add(new Bullet(bulletSprite, x+32, y+11, 3));
 		}
 		for(Bullet bullet : bullets){
 			bullet.update();			
 		}
-
-
 		if(running == false) {
 			System.exit(0);
 		}
