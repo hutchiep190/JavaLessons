@@ -17,23 +17,37 @@ import java.util.Collections;
 
 public class GraphicsTest extends Frame {
 
+	private BufferedImage tankTurretSprite;
+	private BufferedImage tankSprite;
 	private BufferedImage bulletSprite;
-	private int bulletY;
-	private int bulletX;
-	private boolean bulletFired = false;
-	private int x = 0;
-	private int y = 0;
-	private boolean rightArrowKeyPressed = false;
 	private boolean running = false;
 	private Set<Integer> keysPressed = new HashSet<Integer>();
 	private Set<Integer> previousKeysPressed = new HashSet<Integer>();
 	private List<Bullet> bullets = new ArrayList<Bullet>();
+	private List<Tank> tanks = new ArrayList<Tank>();
+	private Tank player;
+
 	public GraphicsTest(){
 		try {
     		bulletSprite = ImageIO.read(new File("bulletsprites.png"));
 		} catch (IOException e) {
+			System.err.println("File not found: bulletsprites.png");
 		}
-		this.setBackground(new Color(0x38,0x8E,0x8E));
+
+		try {
+    		tankSprite = ImageIO.read(new File("tankSprite.png"));
+		} catch (IOException e) {
+			System.err.println("File not found: tankSprite.png");
+		}
+
+		try {
+    		tankTurretSprite = ImageIO.read(new File("tankTurretSprite.png"));
+		} catch (IOException e) {
+			System.err.println("File not found: tankTurretSprite.png");
+		}
+
+		player = new Tank(0, 0, 0, tankSprite, tankTurretSprite);
+		tanks.add(player);
         this.addWindowListener(new GraphicsTestWindowAdapter(this));
         this.addKeyListener(new GraphicsTestKeyAdapter(this));
         this.setSize(320, 240);
@@ -66,28 +80,32 @@ public class GraphicsTest extends Frame {
 			running = false;
 		}
 		if(keysPressed.contains(KeyEvent.VK_RIGHT)) {
-			x++;
+			player.moveRight();
 		}
 		if(keysPressed.contains(KeyEvent.VK_LEFT)) {
-			x--;
+			player.moveLeft();
 		}
 		if(keysPressed.contains(KeyEvent.VK_DOWN)) {
-			y++;
+			player.moveDown();
 		}
 		if(keysPressed.contains(KeyEvent.VK_UP)) {
-			y--;
+			player.moveUp();
 		}
 		if(keysPressed.contains(KeyEvent.VK_W) && !previousKeysPressed.contains(KeyEvent.VK_W)) {
-			bullets.add(new Bullet(bulletSprite, x+11, y-13, 0));
+			player.setTurretDirection(0);
+			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, 0));
 		}
 		if(keysPressed.contains(KeyEvent.VK_A) && !previousKeysPressed.contains(KeyEvent.VK_A)) {
-			bullets.add(new Bullet(bulletSprite, x-13, y+11, 1));
+			player.setTurretDirection(1);
+			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, 1));
 		}
 		if(keysPressed.contains(KeyEvent.VK_S) && !previousKeysPressed.contains(KeyEvent.VK_S)) {
-			bullets.add(new Bullet(bulletSprite, x+11, y+32, 2));
+			player.setTurretDirection(2);
+			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, 2));
 		}
 		if(keysPressed.contains(KeyEvent.VK_D) && !previousKeysPressed.contains(KeyEvent.VK_D)) {
-			bullets.add(new Bullet(bulletSprite, x+32, y+11, 3));
+			player.setTurretDirection(3);
+			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, 3));
 		}
 		for(Bullet bullet : bullets){
 			bullet.update();
@@ -118,8 +136,9 @@ public class GraphicsTest extends Frame {
 		try {
 			g = bf.getDrawGraphics();
 			clearScreen(g);
-			g.setColor(new Color(0x00,0xEE,0x00));
-			g.fillRect(x,y,32,32);
+			for(Tank tank : tanks) {
+				tank.draw(g);
+			}
 			for(Bullet bullet : bullets) {
 				bullet.draw(g);
 			}

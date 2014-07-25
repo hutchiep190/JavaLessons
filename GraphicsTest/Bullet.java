@@ -28,9 +28,6 @@ public class Bullet {
 			x = x+4;
 		}
 	}
-	private void drawSprite(Graphics g, int width, int height, int sourceX, int sourceY) {
-		g.drawImage(image, x, y, x+width, y+height, sourceX, sourceY, sourceX+width, sourceY+height, null);
-	}
 	public int getX() {
 		return x;
 	}
@@ -39,16 +36,16 @@ public class Bullet {
 	}
 	public void draw(Graphics g){
 		if(direction == 0) {
-			drawSprite(g, 10, 13, 142, 197);
+			Utils.drawSprite(g, image, x, y, 10, 13, 142, 197);
 		}
 		if(direction == 1) {
-			drawSprite(g, 13, 10, 121, 215);
+			Utils.drawSprite(g, image, x, y, 13, 10, 121, 215);
 		}
 		if(direction == 2) {
-			drawSprite(g, 10, 13, 142, 230);
+			Utils.drawSprite(g, image, x, y, 10, 13, 142, 230);
 		}
 		if(direction == 3) {
-			drawSprite(g, 13, 10, 159, 215);
+			Utils.drawSprite(g, image, x, y, 13, 10, 159, 215);
 		}
 	}
 }
