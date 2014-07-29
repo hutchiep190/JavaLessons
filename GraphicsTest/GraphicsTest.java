@@ -7,7 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.Set;
 import java.util.HashSet;
-import java.awt.image.BufferedImage;
+import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.File;
@@ -17,9 +17,10 @@ import java.util.Collections;
 
 public class GraphicsTest extends Frame {
 
-	private BufferedImage tankTurretSprite;
-	private BufferedImage tankSprite;
-	private BufferedImage bulletSprite;
+	private Image backroundImage;
+	private Image tankTurretSprite;
+	private Image tankSprite;
+	private Image bulletSprite;
 	private boolean running = false;
 	private Set<Integer> keysPressed = new HashSet<Integer>();
 	private Set<Integer> previousKeysPressed = new HashSet<Integer>();
@@ -28,23 +29,11 @@ public class GraphicsTest extends Frame {
 	private Tank player;
 
 	public GraphicsTest(){
-		try {
-    		bulletSprite = ImageIO.read(new File("bulletsprites.png"));
-		} catch (IOException e) {
-			System.err.println("File not found: bulletsprites.png");
-		}
-
-		try {
-    		tankSprite = ImageIO.read(new File("tankSprite.png"));
-		} catch (IOException e) {
-			System.err.println("File not found: tankSprite.png");
-		}
-
-		try {
-    		tankTurretSprite = ImageIO.read(new File("tankTurretSprite.png"));
-		} catch (IOException e) {
-			System.err.println("File not found: tankTurretSprite.png");
-		}
+		
+		backroundImage = Utils.loadImage("tan-camo.png");
+		bulletSprite = Utils.loadImage("bulletsprites.png");
+		tankTurretSprite = Utils.loadImage("tankTurretSprite.png");
+		tankSprite = Utils.loadImage("tankSprite.png");
 
 		player = new Tank(0, 0, 0, tankSprite, tankTurretSprite);
 		tanks.add(player);
@@ -62,6 +51,10 @@ public class GraphicsTest extends Frame {
 
 	public void setRunning(boolean running){
 		this.running = running;
+	}
+
+	private boolean keyJustPressed(int keyCode) {
+		return keysPressed.contains(keyCode) && !previousKeysPressed.contains(keyCode);
 	}
 
 	public void update() {
@@ -91,19 +84,19 @@ public class GraphicsTest extends Frame {
 		if(keysPressed.contains(KeyEvent.VK_UP)) {
 			player.moveUp();
 		}
-		if(keysPressed.contains(KeyEvent.VK_W) && !previousKeysPressed.contains(KeyEvent.VK_W)) {
+		if(keyJustPressed(KeyEvent.VK_W)) {
 			player.setTurretDirection(0);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, 0));
 		}
-		if(keysPressed.contains(KeyEvent.VK_A) && !previousKeysPressed.contains(KeyEvent.VK_A)) {
+		if(keyJustPressed(KeyEvent.VK_A)) {
 			player.setTurretDirection(1);
 			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, 1));
 		}
-		if(keysPressed.contains(KeyEvent.VK_S) && !previousKeysPressed.contains(KeyEvent.VK_S)) {
+		if(keyJustPressed(KeyEvent.VK_S)) {
 			player.setTurretDirection(2);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, 2));
 		}
-		if(keysPressed.contains(KeyEvent.VK_D) && !previousKeysPressed.contains(KeyEvent.VK_D)) {
+		if(keyJustPressed(KeyEvent.VK_D)) {
 			player.setTurretDirection(3);
 			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, 3));
 		}
@@ -127,8 +120,7 @@ public class GraphicsTest extends Frame {
 		keysPressed.remove(keyCode);
 	}
 	private void clearScreen(Graphics g){
-		g.setColor(Color.BLACK);
-		g.fillRect(0,0,320,240);
+		Utils.drawSprite(g, backroundImage, 0, 0, 320, 240, 0, 0);
 	}
 	public void draw(){
 		BufferStrategy bf = this.getBufferStrategy();
