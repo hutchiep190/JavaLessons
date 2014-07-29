@@ -1,9 +1,9 @@
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class GraphicsTestKeyAdapter extends KeyAdapter{
-	private GraphicsTest gt;
-	public GraphicsTestKeyAdapter(GraphicsTest gt){
+public class TanksKeyAdapter extends KeyAdapter{
+	private Tanks gt;
+	public TanksKeyAdapter(Tanks gt){
 		this.gt = gt;
 	}
 	public void keyReleased(KeyEvent e){

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class GraphicsTest extends Frame {
+public class Tanks extends Frame {
 
 	private Image backroundImage;
 	private Image tankTurretSprite;
@@ -28,7 +28,7 @@ public class GraphicsTest extends Frame {
 	private List<Tank> tanks = new ArrayList<Tank>();
 	private Tank player;
 
-	public GraphicsTest(){
+	public Tanks(){
 		
 		backroundImage = Utils.loadImage("tan-camo.png");
 		bulletSprite = Utils.loadImage("bulletsprites.png");
@@ -37,14 +37,14 @@ public class GraphicsTest extends Frame {
 
 		player = new Tank(0, 0, 0, tankSprite, tankTurretSprite);
 		tanks.add(player);
-        this.addWindowListener(new GraphicsTestWindowAdapter(this));
-        this.addKeyListener(new GraphicsTestKeyAdapter(this));
+        this.addWindowListener(new TanksWindowAdapter(this));
+        this.addKeyListener(new TanksKeyAdapter(this));
         this.setSize(320, 240);
         this.setUndecorated(true);
         this.setVisible(true);
         this.createBufferStrategy(2);
 
-        Timer timer = new Timer(20, new GraphicsTestActionListener(this));
+        Timer timer = new Timer(20, new TanksActionListener(this));
         running = true;
         timer.start();
 	}
@@ -141,7 +141,7 @@ public class GraphicsTest extends Frame {
 		Toolkit.getDefaultToolkit().sync();
 	}
     public static void main (String[] args) {
-    	new GraphicsTest();         
+    	new Tanks();         
     }
 
 }

@@ -1,10 +1,10 @@
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class GraphicsTestActionListener implements ActionListener{
+public class TanksActionListener implements ActionListener{
 	private int t;
-	private GraphicsTest gt;
-	public GraphicsTestActionListener(GraphicsTest gt){
+	private Tanks gt;
+	public TanksActionListener(Tanks gt){
 		this.gt = gt;
 	}
 	public void actionPerformed(ActionEvent e){
