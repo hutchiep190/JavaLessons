@@ -3,6 +3,7 @@ import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.File;
+import java.util.Set;
 
 public class Utils {
 
@@ -18,5 +19,7 @@ public class Utils {
 		}
 		return image;
 	}
-
+	public static boolean keyJustPressed(int keyCode, Set<Integer> keysPressed, Set<Integer> previousKeysPressed) {
+		return keysPressed.contains(keyCode) && !previousKeysPressed.contains(keyCode);
+	}
 }

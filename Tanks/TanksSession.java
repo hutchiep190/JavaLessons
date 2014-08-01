@@ -39,10 +39,6 @@ public class TanksSession implements GameState {
 		this.app = app;
     }
 
-	private boolean keyJustPressed(int keyCode, Set<Integer> keysPressed, Set<Integer> previousKeysPressed) {
-		return keysPressed.contains(keyCode) && !previousKeysPressed.contains(keyCode);
-	}
-
 	public void update(Set<Integer> keysPressed,Set<Integer> previousKeysPressed) {
 		for(int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
@@ -71,19 +67,19 @@ public class TanksSession implements GameState {
 			player.moveUp();
 		}
 
-		if(keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(0);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, 0));
 		}
-		if(keyJustPressed(KeyEvent.VK_A, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_A, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(1);
 			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, 1));
 		}
-		if(keyJustPressed(KeyEvent.VK_S, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_S, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(2);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, 2));
 		}
-		if(keyJustPressed(KeyEvent.VK_D, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_D, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(3);
 			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, 3));
 		}
