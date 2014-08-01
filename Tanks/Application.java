@@ -29,7 +29,9 @@ public class Application extends Frame {
 		states.add(tanksSession);
 		GameState menu = new Menu(this);
 		states.add(menu);
-		switchState(Menu.class);
+		GameState splash = new Splash(this);
+		states.add(splash);
+		switchState(Splash.class);
 
 		this.addWindowListener(new TanksWindowAdapter(this));
         this.addKeyListener(new TanksKeyAdapter(this));
