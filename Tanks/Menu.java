@@ -51,7 +51,7 @@ public class Menu implements GameState {
                 app.switchState(TanksSession.class);
             }
             if(cursor == 1) {
-                System.exit(0);
+                System.exit (0);
             }
         }
     }

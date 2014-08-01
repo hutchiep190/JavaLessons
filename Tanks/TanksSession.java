@@ -33,7 +33,7 @@ public class TanksSession implements GameState {
 		tankTurretSprite = Utils.loadImage("tankTurretSprite.png");
 		tankSprite = Utils.loadImage("tankSprite.png");
 
-		player = new Tank(0, 0, 0, tankSprite, tankTurretSprite);
+		player = new Tank(0, 0, Direction.RIGHT, tankSprite, tankTurretSprite);
 		tanks.add(player);
 
 		this.app = app;
@@ -68,19 +68,19 @@ public class TanksSession implements GameState {
 		}
 
 		if(Utils.keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
-			player.setTurretDirection(0);
+			player.setTurretDirection(Direction.UP);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, 0));
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_A, keysPressed, previousKeysPressed)) {
-			player.setTurretDirection(1);
+			player.setTurretDirection(Direction.LEFT);
 			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, 1));
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_S, keysPressed, previousKeysPressed)) {
-			player.setTurretDirection(2);
+			player.setTurretDirection(Direction.DOWN);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, 2));
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_D, keysPressed, previousKeysPressed)) {
-			player.setTurretDirection(3);
+			player.setTurretDirection(Direction.RIGHT);
 			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, 3));
 		}
 		for(Bullet bullet : bullets){
