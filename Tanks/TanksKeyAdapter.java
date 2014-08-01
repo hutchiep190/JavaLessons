@@ -2,14 +2,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class TanksKeyAdapter extends KeyAdapter{
-	private Tanks gt;
-	public TanksKeyAdapter(Tanks gt){
-		this.gt = gt;
+	private Application app;
+	public TanksKeyAdapter(Application app){
+		this.app = app;
 	}
 	public void keyReleased(KeyEvent e){
-		gt.setKeyReleased(e.getKeyCode());
+		app.setKeyReleased(e.getKeyCode());
 	}
 	public void keyPressed(KeyEvent e){
-		gt.setKeyPressed(e.getKeyCode());
+		app.setKeyPressed(e.getKeyCode());
 	}
 }

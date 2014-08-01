@@ -15,20 +15,18 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Tanks extends Frame {
+public class TanksSession implements GameState {
 
+	private Application app;
 	private Image backroundImage;
 	private Image tankTurretSprite;
 	private Image tankSprite;
 	private Image bulletSprite;
-	private boolean running = false;
-	private Set<Integer> keysPressed = new HashSet<Integer>();
-	private Set<Integer> previousKeysPressed = new HashSet<Integer>();
 	private List<Bullet> bullets = new ArrayList<Bullet>();
 	private List<Tank> tanks = new ArrayList<Tank>();
 	private Tank player;
 
-	public Tanks(){
+	public TanksSession(Application app){
 		
 		backroundImage = Utils.loadImage("tan-camo.png");
 		bulletSprite = Utils.loadImage("bulletsprites.png");
@@ -37,27 +35,15 @@ public class Tanks extends Frame {
 
 		player = new Tank(0, 0, 0, tankSprite, tankTurretSprite);
 		tanks.add(player);
-        this.addWindowListener(new TanksWindowAdapter(this));
-        this.addKeyListener(new TanksKeyAdapter(this));
-        this.setSize(320, 240);
-        this.setUndecorated(true);
-        this.setVisible(true);
-        this.createBufferStrategy(2);
 
-        Timer timer = new Timer(20, new TanksActionListener(this));
-        running = true;
-        timer.start();
-	}
+		this.app = app;
+    }
 
-	public void setRunning(boolean running){
-		this.running = running;
-	}
-
-	private boolean keyJustPressed(int keyCode) {
+	private boolean keyJustPressed(int keyCode, Set<Integer> keysPressed, Set<Integer> previousKeysPressed) {
 		return keysPressed.contains(keyCode) && !previousKeysPressed.contains(keyCode);
 	}
 
-	public void update() {
+	public void update(Set<Integer> keysPressed,Set<Integer> previousKeysPressed) {
 		for(int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
 			if(bullet == null){
@@ -70,8 +56,8 @@ public class Tanks extends Frame {
 		bullets.removeAll(Collections.singleton(null));
 
 		if(keysPressed.contains(KeyEvent.VK_ESCAPE)) {
-			running = false;
-		}
+            app.switchState(Menu.class);
+        }
 		if(keysPressed.contains(KeyEvent.VK_RIGHT)) {
 			player.moveRight();
 		}
@@ -84,64 +70,37 @@ public class Tanks extends Frame {
 		if(keysPressed.contains(KeyEvent.VK_UP)) {
 			player.moveUp();
 		}
-		if(keyJustPressed(KeyEvent.VK_W)) {
+
+		if(keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(0);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, 0));
 		}
-		if(keyJustPressed(KeyEvent.VK_A)) {
+		if(keyJustPressed(KeyEvent.VK_A, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(1);
 			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, 1));
 		}
-		if(keyJustPressed(KeyEvent.VK_S)) {
+		if(keyJustPressed(KeyEvent.VK_S, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(2);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, 2));
 		}
-		if(keyJustPressed(KeyEvent.VK_D)) {
+		if(keyJustPressed(KeyEvent.VK_D, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(3);
 			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, 3));
 		}
 		for(Bullet bullet : bullets){
 			bullet.update();
 		}
-		if(running == false) {
-			System.exit(0);
-		}
-		previousKeysPressed.clear();
-		for(Integer keyCode : keysPressed) {
-			previousKeysPressed.add(keyCode);
-		}
-	}
-
-	public void setKeyPressed(int keyCode) {
-		keysPressed.add(keyCode);
-	}
-
-	public void setKeyReleased(int keyCode) {
-		keysPressed.remove(keyCode);
 	}
 	private void clearScreen(Graphics g){
 		Utils.drawSprite(g, backroundImage, 0, 0, 320, 240, 0, 0);
 	}
-	public void draw(){
-		BufferStrategy bf = this.getBufferStrategy();
-		Graphics g = null;
-		try {
-			g = bf.getDrawGraphics();
-			clearScreen(g);
-			for(Tank tank : tanks) {
-				tank.draw(g);
-			}
-			for(Bullet bullet : bullets) {
-				bullet.draw(g);
-			}
-		} finally {
-			g.dispose();
+	public void draw(Graphics g){
+		clearScreen(g);
+		for(Tank tank : tanks) {
+			tank.draw(g);
 		}
-		bf.show();
-		Toolkit.getDefaultToolkit().sync();
+		for(Bullet bullet : bullets) {
+			bullet.draw(g);
+		}
 	}
-    public static void main (String[] args) {
-    	new Tanks();         
-    }
-
 }

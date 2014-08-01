@@ -2,14 +2,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class TanksActionListener implements ActionListener{
-	private int t;
-	private Tanks gt;
-	public TanksActionListener(Tanks gt){
-		this.gt = gt;
+	private Application app;
+	public TanksActionListener(Application app){
+		this.app = app;
 	}
 	public void actionPerformed(ActionEvent e){
-		gt.draw();
-		gt.update();
-		t += 1;
+		app.draw();
+		app.update();
 	}
 }
