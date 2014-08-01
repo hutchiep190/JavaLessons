@@ -33,11 +33,40 @@ public class TanksSession implements GameState {
 		tankTurretSprite = Utils.loadImage("tankTurretSprite.png");
 		tankSprite = Utils.loadImage("tankSprite.png");
 
-		player = new Tank(0, 0, Direction.RIGHT, tankSprite, tankTurretSprite);
+		player = new Tank(50, 0, Direction.RIGHT, tankSprite, tankTurretSprite);
 		tanks.add(player);
-
+		tanks.add(new Tank(200, 50, Direction.LEFT, tankSprite, tankTurretSprite));
+		tanks.add(new Tank(0, 200, Direction.UP, tankSprite, tankTurretSprite));
+		
 		this.app = app;
     }
+    private boolean tanksCollide(Tank tankA, Tank tankB) {
+    	if(tankB.getX() - tankA.getX() >= 32) {
+    		return false;
+    	}
+    	if(tankA.getX() - tankB.getX() >= 32) {
+    		return false;
+    	}
+    	if(tankB.getY() - tankA.getY() >= 32) {
+    		return false;
+    	}
+    	if(tankA.getY() - tankB.getY() >= 32) {
+    		return false;
+    	}
+    	return true;
+    }
+    private boolean tanksCollide(Tank anyTank, List<Tank> tanks) {
+    	for(Tank tank : tanks) {
+    		if(tank == anyTank) {
+    			continue;
+    		}
+    		if(tanksCollide(tank, anyTank)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+
 
 	public void update(Set<Integer> keysPressed,Set<Integer> previousKeysPressed) {
 		for(int i = 0; i < bullets.size(); i++) {
@@ -56,16 +85,28 @@ public class TanksSession implements GameState {
         }
 		if(keysPressed.contains(KeyEvent.VK_RIGHT)) {
 			player.moveRight();
+			if(tanksCollide(player, tanks)){
+				player.moveLeft();
+			}
 		}
 		if(keysPressed.contains(KeyEvent.VK_LEFT)) {
 			player.moveLeft();
+			if(tanksCollide(player, tanks)){
+				player.moveRight();
+			}
 		}
 		if(keysPressed.contains(KeyEvent.VK_DOWN)) {
 			player.moveDown();
+			if(tanksCollide(player, tanks)){
+				player.moveUp();
+			}
 		}
 		if(keysPressed.contains(KeyEvent.VK_UP)) {
 			player.moveUp();
-		}
+			if(tanksCollide(player, tanks)){
+				player.moveDown();
+			}
+		}	
 
 		if(Utils.keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.UP);
