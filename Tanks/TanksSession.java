@@ -74,6 +74,9 @@ public class TanksSession implements GameState {
 			if(bullet == null){
 				continue;
 			}
+			if(!bullet.isAlive()) {
+				bullets.set(i, null);
+			}
 			if(bullet.getX() > 640 || bullet.getX() < -320 || bullet.getY() > 480 || bullet.getY() < -240) {
 				bullets.set(i, null);
 			}
@@ -110,22 +113,22 @@ public class TanksSession implements GameState {
 
 		if(Utils.keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.UP);
-			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, 0));
+			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, Direction.UP));
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_A, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.LEFT);
-			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, 1));
+			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, Direction.LEFT));
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_S, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.DOWN);
-			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, 2));
+			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, Direction.DOWN));
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_D, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.RIGHT);
-			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, 3));
+			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, Direction.RIGHT));
 		}
 		for(Bullet bullet : bullets){
-			bullet.update();
+			bullet.update(tanks);
 		}
 	}
 	private void clearScreen(Graphics g){
