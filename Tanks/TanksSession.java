@@ -100,35 +100,40 @@ public class TanksSession implements GameState {
 
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD8, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.UP);
-			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, Direction.UP));
+			player.shootBullet(Direction.UP, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD4, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.LEFT);
-			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, Direction.LEFT));
+			player.shootBullet(Direction.LEFT, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD2, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.DOWN);
-			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, Direction.DOWN));
+			player.shootBullet(Direction.DOWN, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD6, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.RIGHT);
-			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, Direction.RIGHT));
+			player.shootBullet(Direction.RIGHT, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD1, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.DOWN_LEFT);
-			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+32, Direction.DOWN_LEFT));
+			player.shootBullet(Direction.DOWN_LEFT, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD3, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.DOWN_RIGHT);
-			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+32, Direction.DOWN_RIGHT));
+			player.shootBullet(Direction.DOWN_RIGHT, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD9, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.UP_RIGHT);
-			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()-13, Direction.UP_RIGHT));
+			player.shootBullet(Direction.UP_RIGHT, bullets, bulletSprite);
 		}
 		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD7, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.UP_LEFT);
-			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()-13, Direction.UP_LEFT));
+			player.shootBullet(Direction.UP_LEFT, bullets, bulletSprite);
+		}
+		for(Tank tank : tanks){
+			if(tank != player) {
+				tank.thinkDumb(bullets, bulletSprite);
+			}
 		}
 		for(Bullet bullet : bullets){
 			bullet.update(tanks);

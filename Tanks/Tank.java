@@ -2,9 +2,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Tank {
 
+	private static Random random = new Random();
 	private boolean moving = false;
 	private Direction turretDirection = Direction.RIGHT;
 	private Direction direction;
@@ -13,6 +15,7 @@ public class Tank {
 	private int x;
 	private int y;
 	private int hp = 1;
+	private int t = 0;
 
 	public Tank(int x, int y, Direction direction, Image tankSprite, Image tankTurretSprite) {
 		this.x = x;
@@ -22,6 +25,72 @@ public class Tank {
 		this.tankTurretSprite = tankTurretSprite;
 	}
 
+	private Direction intToDirection(int iDirection) {
+		switch(iDirection){
+			case 0:
+				return Direction.RIGHT;
+			case 1:
+				return Direction.LEFT;
+			case 2:
+				return Direction.UP;
+			case 3:
+				return Direction.DOWN;
+			case 4:
+				return Direction.UP_RIGHT;
+			case 5:
+				return Direction.UP_LEFT;
+			case 6:
+				return Direction.DOWN_RIGHT;
+			case 7:
+				return Direction.DOWN_LEFT;
+			default:
+				return Direction.RIGHT;
+		}
+	}
+
+	public void thinkDumb(List<Bullet> bullets, Image bulletSprite) {
+		if(t >= 50) {
+			int iTurretDirection = random.nextInt(8);
+			turretDirection = intToDirection(iTurretDirection);
+			int iDirection = random.nextInt(8);
+			direction = intToDirection(iDirection);
+			moving = true;
+			t=0;
+			shootBullet(turretDirection, bullets, bulletSprite);
+		}
+
+		t++;
+	}
+	public void shootBullet(Direction direction, List<Bullet> bullets, Image bulletSprite) {
+		switch(direction){
+			case RIGHT:
+				bullets.add(new Bullet(bulletSprite, x+32, y+11, Direction.RIGHT));
+				break;
+			case LEFT:
+				bullets.add(new Bullet(bulletSprite, x-13, y+11, Direction.LEFT));
+				break;
+			case UP:
+				bullets.add(new Bullet(bulletSprite, x+11, y-13, Direction.UP));
+				break;
+			case DOWN:
+				bullets.add(new Bullet(bulletSprite, x+11, y+32, Direction.DOWN));
+				break;
+			case UP_RIGHT:
+				bullets.add(new Bullet(bulletSprite, x+32, y-13, Direction.UP_RIGHT));
+				break;
+			case UP_LEFT:
+				bullets.add(new Bullet(bulletSprite, x-13, y-13, Direction.UP_LEFT));
+				break;
+			case DOWN_RIGHT:
+				bullets.add(new Bullet(bulletSprite, x+32, y+32, Direction.DOWN_RIGHT));
+				break;
+			case DOWN_LEFT:
+				bullets.add(new Bullet(bulletSprite, x-13, y+32, Direction.DOWN_LEFT));
+				break;
+			default:
+				break;
+		}
+	}
 	public void takeHealth(int damage) {
 		hp -= damage;
 	}
