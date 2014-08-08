@@ -53,11 +53,6 @@ public class Bullet {
 		return alive;
 	}
 	public void update(List<Tank> tanks){
-		if(bulletHit(tanks)) {
-			alive = false;
-		}
-
-
 		if(direction == Direction.UP) {
 			y = y-4;
 		}
@@ -69,6 +64,28 @@ public class Bullet {
 		}
 		if(direction == Direction.RIGHT) {
 			x = x+4;
+		}
+		if(direction == Direction.UP_LEFT) {
+			x = x-4;
+			y = y-4;
+		}
+		if(direction == Direction.DOWN_LEFT) {
+			x = x-4;
+			y = y+4;
+		}
+		if(direction == Direction.DOWN_RIGHT){
+			x += 4;
+			y += 4;
+		}
+		if(direction == Direction.UP_RIGHT){
+			x += 4;
+			y -= 4;
+		}
+		if(bulletHit(tanks)) {
+			alive = false;
+		}
+		if(x > 640 || x < -320 || y > 480 || y < -240) {
+			alive = false;
 		}
 	}
 	public int getX() {
@@ -89,6 +106,18 @@ public class Bullet {
 		}
 		if(direction == Direction.RIGHT) {
 			Utils.drawSprite(g, image, x, y, 13, 10, 159, 215);
+		}
+		if(direction == Direction.DOWN_LEFT) {
+			Utils.drawSprite(g, image, x, y, 13, 13, 121, 229);
+		}
+		if(direction == Direction.UP_LEFT) {
+			Utils.drawSprite(g, image, x, y, 13, 13, 122, 197);
+		}
+		if(direction == Direction.UP_RIGHT) {
+			Utils.drawSprite(g, image, x, y, 13, 13, 158, 198);
+		}
+		if(direction == Direction.DOWN_RIGHT) {
+			Utils.drawSprite(g, image, x, y, 13, 13, 159, 229);
 		}
 	}
 }

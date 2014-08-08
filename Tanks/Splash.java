@@ -26,7 +26,7 @@ public class Splash implements GameState {
         if(!keysPressed.isEmpty()){
             app.switchState(Menu.class);
         }
-        if(t > 100) {
+        if(t > 50) {
             app.switchState(Menu.class);
         }
     }

@@ -40,34 +40,6 @@ public class TanksSession implements GameState {
 		
 		this.app = app;
     }
-    private boolean tanksCollide(Tank tankA, Tank tankB) {
-    	if(tankB.getX() - tankA.getX() >= 32) {
-    		return false;
-    	}
-    	if(tankA.getX() - tankB.getX() >= 32) {
-    		return false;
-    	}
-    	if(tankB.getY() - tankA.getY() >= 32) {
-    		return false;
-    	}
-    	if(tankA.getY() - tankB.getY() >= 32) {
-    		return false;
-    	}
-    	return true;
-    }
-    private boolean tanksCollide(Tank anyTank, List<Tank> tanks) {
-    	for(Tank tank : tanks) {
-    		if(tank == anyTank) {
-    			continue;
-    		}
-    		if(tanksCollide(tank, anyTank)) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
-
-
 	public void update(Set<Integer> keysPressed,Set<Integer> previousKeysPressed) {
 		for(int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
@@ -77,58 +49,80 @@ public class TanksSession implements GameState {
 			if(!bullet.isAlive()) {
 				bullets.set(i, null);
 			}
-			if(bullet.getX() > 640 || bullet.getX() < -320 || bullet.getY() > 480 || bullet.getY() < -240) {
-				bullets.set(i, null);
-			}
 		}
 		bullets.removeAll(Collections.singleton(null));
-
 		if(keysPressed.contains(KeyEvent.VK_ESCAPE)) {
             app.switchState(Menu.class);
         }
-		if(keysPressed.contains(KeyEvent.VK_RIGHT)) {
-			player.moveRight();
-			if(tanksCollide(player, tanks)){
-				player.moveLeft();
-			}
-		}
-		if(keysPressed.contains(KeyEvent.VK_LEFT)) {
-			player.moveLeft();
-			if(tanksCollide(player, tanks)){
-				player.moveRight();
-			}
-		}
-		if(keysPressed.contains(KeyEvent.VK_DOWN)) {
-			player.moveDown();
-			if(tanksCollide(player, tanks)){
-				player.moveUp();
-			}
-		}
-		if(keysPressed.contains(KeyEvent.VK_UP)) {
-			player.moveUp();
-			if(tanksCollide(player, tanks)){
-				player.moveDown();
-			}
-		}	
 
-		if(Utils.keyJustPressed(KeyEvent.VK_W, keysPressed, previousKeysPressed)) {
+        boolean moving = false;
+        int dx = 0;
+        int dy = 0;
+
+		if(keysPressed.contains(KeyEvent.VK_D)) {
+			moving = true;
+			dx++;
+		}
+		if(keysPressed.contains(KeyEvent.VK_A)) {
+			moving = true;
+			dx--;
+		}
+		if(keysPressed.contains(KeyEvent.VK_S)) {
+			moving = true;
+			dy++;
+		}
+		if(keysPressed.contains(KeyEvent.VK_W)) {
+			moving = true;
+			dy--;
+		}
+		if(dx == 0 && dy == -1) player.setDirection(Direction.UP); 
+		if(dx == -1 && dy == -1) player.setDirection(Direction.UP_LEFT);
+		if(dx == -1 && dy == 0) player.setDirection(Direction.LEFT); 
+		if(dx == -1 && dy == 1) player.setDirection(Direction.DOWN_LEFT); 
+		if(dx == 0 && dy == 1) player.setDirection(Direction.DOWN); 
+		if(dx == 1 && dy == 1) player.setDirection(Direction.DOWN_RIGHT); 
+		if(dx == 1 && dy == 0) player.setDirection(Direction.RIGHT); 
+		if(dx == 1 && dy == -1) player.setDirection(Direction.UP_RIGHT); 
+		 
+		player.setMoving(moving);
+
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD8, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.UP);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()-13, Direction.UP));
 		}
-		if(Utils.keyJustPressed(KeyEvent.VK_A, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD4, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.LEFT);
 			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+11, Direction.LEFT));
 		}
-		if(Utils.keyJustPressed(KeyEvent.VK_S, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD2, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.DOWN);
 			bullets.add(new Bullet(bulletSprite, player.getX()+11, player.getY()+32, Direction.DOWN));
 		}
-		if(Utils.keyJustPressed(KeyEvent.VK_D, keysPressed, previousKeysPressed)) {
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD6, keysPressed, previousKeysPressed)) {
 			player.setTurretDirection(Direction.RIGHT);
 			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+11, Direction.RIGHT));
 		}
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD1, keysPressed, previousKeysPressed)) {
+			player.setTurretDirection(Direction.DOWN_LEFT);
+			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()+32, Direction.DOWN_LEFT));
+		}
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD3, keysPressed, previousKeysPressed)) {
+			player.setTurretDirection(Direction.DOWN_RIGHT);
+			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()+32, Direction.DOWN_RIGHT));
+		}
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD9, keysPressed, previousKeysPressed)) {
+			player.setTurretDirection(Direction.UP_RIGHT);
+			bullets.add(new Bullet(bulletSprite, player.getX()+32, player.getY()-13, Direction.UP_RIGHT));
+		}
+		if(Utils.keyJustPressed(KeyEvent.VK_NUMPAD7, keysPressed, previousKeysPressed)) {
+			player.setTurretDirection(Direction.UP_LEFT);
+			bullets.add(new Bullet(bulletSprite, player.getX()-13, player.getY()-13, Direction.UP_LEFT));
+		}
 		for(Bullet bullet : bullets){
 			bullet.update(tanks);
+		}
+		for(Tank tank : tanks){
+			tank.update(tanks);
 		}
 	}
 	private void clearScreen(Graphics g){
