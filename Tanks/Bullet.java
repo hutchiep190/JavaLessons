@@ -41,13 +41,13 @@ public class Bullet {
     	}
     	return true;
     }
-    private boolean bulletHit(List<Tank> tanks) {
+    private Tank bulletHit(List<Tank> tanks) {
     	for(Tank tank : tanks) {
     		if(bulletHit(tank)) {
-    			return true;
+    			return tank;
     		}
     	}
-    	return false;
+    	return null;
 	}
 	public boolean isAlive() {
 		return alive;
@@ -81,7 +81,9 @@ public class Bullet {
 			x += 4;
 			y -= 4;
 		}
-		if(bulletHit(tanks)) {
+		Tank hitTank = bulletHit(tanks);
+		if(hitTank != null) {
+			hitTank.takeHealth(1);
 			alive = false;
 		}
 		if(x > 640 || x < -320 || y > 480 || y < -240) {

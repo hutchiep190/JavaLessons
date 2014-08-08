@@ -12,6 +12,7 @@ public class Tank {
 	private Image tankTurretSprite;
 	private int x;
 	private int y;
+	private int hp = 1;
 
 	public Tank(int x, int y, Direction direction, Image tankSprite, Image tankTurretSprite) {
 		this.x = x;
@@ -21,6 +22,12 @@ public class Tank {
 		this.tankTurretSprite = tankTurretSprite;
 	}
 
+	public void takeHealth(int damage) {
+		hp -= damage;
+	}
+	public boolean isAlive() {
+		return hp > 0;
+	}
 	public int getX() {
 		return x;
 	}

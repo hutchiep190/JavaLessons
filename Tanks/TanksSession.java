@@ -51,6 +51,18 @@ public class TanksSession implements GameState {
 			}
 		}
 		bullets.removeAll(Collections.singleton(null));
+		
+		for(int i = 0; i < tanks.size(); i++) {
+			Tank tank = tanks.get(i);
+			if(tank == null){
+				continue;
+			}
+			if(!tank.isAlive()) {
+				tanks.set(i, null);
+			}
+		}
+		tanks.removeAll(Collections.singleton(null));
+		
 		if(keysPressed.contains(KeyEvent.VK_ESCAPE)) {
             app.switchState(Menu.class);
         }
