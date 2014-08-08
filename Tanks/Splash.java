@@ -10,6 +10,8 @@ public class Splash implements GameState {
     private Image backgroundImage;
     private int t = 0;
 
+    public void reset(){}
+
     public Splash(Application app) {
         this.app = app;
         backgroundImage = Utils.loadImage("Tanks.png");

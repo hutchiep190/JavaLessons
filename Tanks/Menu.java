@@ -15,6 +15,7 @@ public class Menu implements GameState {
         backgroundImage = Utils.loadImage("Menu.png");
     }
 
+    public void reset(){}
     public void draw(Graphics g){
         Utils.drawSprite(g, backgroundImage, 0, 0, 320, 240, 0, 0);
         g.setColor(Color.BLACK);
@@ -48,6 +49,7 @@ public class Menu implements GameState {
         }
         if(keysPressed.contains(KeyEvent.VK_ENTER)){
             if(cursor == 0) {
+                app.resetState(TanksSession.class);
                 app.switchState(TanksSession.class);
             }
             if(cursor == 1) {

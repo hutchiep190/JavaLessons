@@ -33,13 +33,18 @@ public class TanksSession implements GameState {
 		tankTurretSprite = Utils.loadImage("tankTurretSprite.png");
 		tankSprite = Utils.loadImage("tankSprite.png");
 
+		reset();
+		
+		this.app = app;
+    }
+	public void reset(){
+		tanks.clear();
+		bullets.clear();
 		player = new Tank(50, 0, Direction.RIGHT, tankSprite, tankTurretSprite);
 		tanks.add(player);
 		tanks.add(new Tank(200, 50, Direction.LEFT, tankSprite, tankTurretSprite));
 		tanks.add(new Tank(0, 200, Direction.UP, tankSprite, tankTurretSprite));
-		
-		this.app = app;
-    }
+	}
 	public void update(Set<Integer> keysPressed,Set<Integer> previousKeysPressed) {
 		for(int i = 0; i < bullets.size(); i++) {
 			Bullet bullet = bullets.get(i);
@@ -140,6 +145,9 @@ public class TanksSession implements GameState {
 		}
 		for(Tank tank : tanks){
 			tank.update(tanks);
+		}
+		if(!player.isAlive()) {
+			app.switchState(Menu.class);
 		}
 	}
 	private void clearScreen(Graphics g){

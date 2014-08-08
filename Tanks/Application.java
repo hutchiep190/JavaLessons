@@ -53,6 +53,13 @@ public class Application extends Frame {
 		}
 		keysPressed.clear();
 	}
+	public void resetState(Class clazz){
+		for(GameState state : states) {
+			if(clazz.isInstance(state)){
+				state.reset();
+			}
+		}	
+	}
 
 	public void draw(){
 		BufferStrategy bf = this.getBufferStrategy();
