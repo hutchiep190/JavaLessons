@@ -1,0 +1,29 @@
+<project name="ThreeDimensionalTest" basedir="." default="main">
+    <path id="classpath">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
+    <target name="main" depends="clean,run"/>
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+    <target name="jar" depends="compile">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/ThreeDimensionalTest.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="ThreeDimensionalTest" />
+            </manifest>
+        </jar>
+    </target>
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes" classpathref="classpath"/>    
+    </target>
+    <target name="run" depends="jar">
+        <java fork="true" classname="ThreeDimensionalTest">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="build/jar/ThreeDimensionalTest.jar"/>
+            </classpath>
+        </java>
+    </target>
+</project>
