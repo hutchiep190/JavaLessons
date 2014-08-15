@@ -6,6 +6,7 @@ import javax.media.opengl.fixedfunc.*;
 import com.jogamp.opengl.util.FPSAnimator;
 
 public class ThreeDimensionalTest implements GLEventListener {
+    private Model cube;
     public static void main(String[] args) { 
         Frame frame = new Frame("3D Stuff");
         frame.setSize(640, 480);
@@ -24,6 +25,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         animator.start();
     }
     public void drawCube(GL2 gl, float x, float y, float z){
+        gl.glLoadIdentity();
         gl.glTranslatef(x,y,z);
         gl.glBegin(GL2.GL_QUADS);
         gl.glColor3f(1.0f, 0.5f, 0.0f);
@@ -47,18 +49,20 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glVertex3f(1.0f,1.0f,-1.0f);
         gl.glVertex3f(1.0f,1.0f,1.0f);
         gl.glEnd();
-        gl.glTranslatef(-x,-y,-z);
     }
     public void display(GLAutoDrawable glDrawable){
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
+        
         drawCube(gl, 2.0f, -2.0f, -10.0f);
         drawCube(gl, -2.0f, 2.0f, -10.0f);
+        cube.draw(gl, 3.0f, 3.0f, -10.0f);
     }
     public void init(GLAutoDrawable glDrawable){
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glEnable(GL2.GL_LIGHTING);
+        cube = new Model("tank.obj");
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 
         GL2 gl = glDrawable.getGL().getGL2();
