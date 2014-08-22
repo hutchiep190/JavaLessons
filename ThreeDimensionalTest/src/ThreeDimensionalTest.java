@@ -6,7 +6,7 @@ import javax.media.opengl.fixedfunc.*;
 import com.jogamp.opengl.util.FPSAnimator;
 
 public class ThreeDimensionalTest implements GLEventListener {
-    private Model cube;
+    private Model tank;
     public static void main(String[] args) { 
         Frame frame = new Frame("3D Stuff");
         frame.setSize(640, 480);
@@ -51,18 +51,29 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glEnd();
     }
     public void display(GLAutoDrawable glDrawable){
+        
         GL2 gl = glDrawable.getGL().getGL2();
-        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         
         drawCube(gl, 2.0f, -2.0f, -10.0f);
         drawCube(gl, -2.0f, 2.0f, -10.0f);
-        cube.draw(gl, 3.0f, 3.0f, -10.0f);
+        tank.draw(gl, 3.0f, 3.0f, -10.0f);
     }
     public void init(GLAutoDrawable glDrawable){
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_LIGHTING);
-        cube = new Model("tank.obj");
+        gl.glEnable(GL2.GL_LIGHT0);
+        float [] zero = {0.0f, 0.0f, 0.0f, 1.0f};
+        float [] diffuse = {1.0f, 1.0f, 1.0f, 1.0f};
+        float [] position = {0.0f, 10.0f, 0.0f, 1.0f};
+        float [] ambient = {0.2f, 0.2f, 0.2f, 1.0f};
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, zero, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
+        tank = new Model("tank.obj");
+        
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 
         GL2 gl = glDrawable.getGL().getGL2();
