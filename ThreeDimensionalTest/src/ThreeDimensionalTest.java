@@ -55,9 +55,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         
-        drawCube(gl, 2.0f, -2.0f, -10.0f);
-        drawCube(gl, -2.0f, 2.0f, -10.0f);
-        tank.draw(gl, 3.0f, 3.0f, -10.0f);
+        tank.draw(gl, 3.0f, -2.7f, -10.0f);
     }
     public void init(GLAutoDrawable glDrawable){
         GL2 gl = glDrawable.getGL().getGL2();
