@@ -70,7 +70,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, zero, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-        tank = new Model("tank.obj");
+        tank = new Model("tank_w_treads.obj");
         
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 
