@@ -81,10 +81,10 @@ public class Model {
             return cn;
         }
     }
-    public void draw(GL2 gl, float x, float y, float z) {
+    public void draw(GL2 gl, float x, float y, float z, float direction) {
         gl.glLoadIdentity();
+        gl.glRotatef(direction, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(x,y,z);
-        gl.glRotatef(angle++,0.0f,1.0f,0.0f);
         gl.glBegin(GL2.GL_TRIANGLES);
         float [] color = {1.0f,1.0f,1.0f,1.0f};
         for(Face face: faces) {
