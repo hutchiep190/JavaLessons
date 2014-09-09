@@ -32,7 +32,7 @@ public class TDMap {
            for(int j = 0; j < list.size(); j++){
                 int value = list.get(j);
                 if(value == 1){
-                    drawCube(gl,j-cx,-cy,i-cz,-(cDirection-90));
+                    drawCube(gl,j-cx,-cy,i-cz,-cDirection);
                 }
             }
         }

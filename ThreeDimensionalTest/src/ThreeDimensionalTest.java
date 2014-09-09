@@ -11,6 +11,7 @@ public class ThreeDimensionalTest implements GLEventListener {
     private Set<Integer> keySet = new HashSet<Integer>();
     private Model model;
     private TDMap map;
+    private TDMap roofFloor;
     private float x = 0.0f;
     private float y = 0.0f;
     private float z = 0.0f;
@@ -48,10 +49,13 @@ public class ThreeDimensionalTest implements GLEventListener {
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         
-        map.draw(gl,cx,cy,cz,cDirection);
+        roofFloor.draw(gl,cx,cy-3,cz,(cDirection+90));
+        map.draw(gl,cx,cy-2,cz,(cDirection+90));
+        map.draw(gl,cx,cy-1,cz,(cDirection+90));
+        map.draw(gl,cx,cy,cz,(cDirection+90));
+        roofFloor.draw(gl,cx,cy+1,cz,(cDirection+90));
 
-        model.draw(gl, 0.0f - cx, -2.7f - cy, -10.0f - cz, -(cDirection-90));
-        if(keySet.contains(KeyEvent.VK_CONTROL)){}
+        model.draw(gl, 0.0f - cx, -2.7f - cy, -10.0f - cz, -(cDirection+90));
         if(keySet.contains(KeyEvent.VK_A)){
             cDirection += 5.0f;
         }
@@ -59,19 +63,47 @@ public class ThreeDimensionalTest implements GLEventListener {
             cDirection -= 5.0f;
         }
         if(keySet.contains(KeyEvent.VK_W)){
+            z += Math.sin(cDirection);
+            x += Math.cos(cDirection);
+        }
+        if(keySet.contains(KeyEvent.VK_S)){
+            z -= Math.sin(cDirection);
+            x -= Math.sin(cDirection);
+        }
+        if(keySet.contains(KeyEvent.VK_NUMPAD8)){
             z = z - 0.1f;
             if(keySet.contains(KeyEvent.VK_CONTROL)){
                 z = z + 0.05f;
+                y = y - 0.2f;
             }else if(keySet.contains(KeyEvent.VK_SHIFT)){
                 z = z - 0.15f;
             }
         }
-        if(keySet.contains(KeyEvent.VK_S)){
+        if(keySet.contains(KeyEvent.VK_NUMPAD2)){
             z = z + 0.1f;
             if(keySet.contains(KeyEvent.VK_CONTROL)){
                 z = z - 0.05f;
+                y = y - 0.2f;
             }else if(keySet.contains(KeyEvent.VK_SHIFT)){
                 z = z + 0.1f;
+            }
+        }
+        if(keySet.contains(KeyEvent.VK_LEFT)){
+            x = x - 0.1f;
+            if(keySet.contains(KeyEvent.VK_CONTROL)){
+                x = x + 0.05f;
+                y = y - 0.2f;
+            }else if(keySet.contains(KeyEvent.VK_SHIFT)){
+                x = x - 0.05f;
+            }
+        }
+        if(keySet.contains(KeyEvent.VK_RIGHT)){
+            x = x + 0.1f;
+            if(keySet.contains(KeyEvent.VK_CONTROL)){
+                x = x - 0.05f;
+                y = y - 0.2f;
+            }else if(keySet.contains(KeyEvent.VK_SHIFT)){
+                x = x + 0.05f;
             }
         }
         if(keySet.contains(KeyEvent.VK_SPACE)){
@@ -113,6 +145,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
         model = new Model("test.obj");
         map = new TDMap("Maze.map");
+        roofFloor = new TDMap("RoofFloor.map");
         
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 
