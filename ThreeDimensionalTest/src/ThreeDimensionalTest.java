@@ -49,13 +49,13 @@ public class ThreeDimensionalTest implements GLEventListener {
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         
-        roofFloor.draw(gl,cx,cy-3,cz,(cDirection+90));
-        map.draw(gl,cx,cy-2,cz,(cDirection+90));
-        map.draw(gl,cx,cy-1,cz,(cDirection+90));
-        map.draw(gl,cx,cy,cz,(cDirection+90));
-        roofFloor.draw(gl,cx,cy+1,cz,(cDirection+90));
+        roofFloor.draw(gl,cx,cy-3,cz,(cDirection-90));
+        map.draw(gl,cx,cy-2,cz,(cDirection-90));
+        map.draw(gl,cx,cy-1,cz,(cDirection-90));
+        map.draw(gl,cx,cy,cz,(cDirection-90));
+        roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
 
-        model.draw(gl, 0.0f - cx, -2.7f - cy, -10.0f - cz, -(cDirection+90));
+        model.draw(gl, 0.0f - cx, -2.7f - cy, -10.0f - cz, -(cDirection-90));
         if(keySet.contains(KeyEvent.VK_A)){
             cDirection += 5.0f;
         }
@@ -63,12 +63,12 @@ public class ThreeDimensionalTest implements GLEventListener {
             cDirection -= 5.0f;
         }
         if(keySet.contains(KeyEvent.VK_W)){
-            z += Math.sin(cDirection);
-            x += Math.cos(cDirection);
+            z -= Math.sin(cDirection*Math.PI/180)*0.2;
+            x += Math.cos(cDirection*Math.PI/180)*0.2;
         }
         if(keySet.contains(KeyEvent.VK_S)){
-            z -= Math.sin(cDirection);
-            x -= Math.sin(cDirection);
+            z += Math.sin(cDirection*Math.PI/180)*0.2;
+            x -= Math.cos(cDirection*Math.PI/180)*0.2;
         }
         if(keySet.contains(KeyEvent.VK_NUMPAD8)){
             z = z - 0.1f;
