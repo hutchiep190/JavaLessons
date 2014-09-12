@@ -1,3 +1,5 @@
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
 import java.util.*;
 import java.io.*;
 import javax.media.opengl.*;
@@ -5,10 +7,12 @@ import javax.media.opengl.fixedfunc.*;
 
 public class Model {
     private int angle = 0;
+    private int texId;
     private List<Vertex> vertices = new ArrayList<Vertex>();
     private List<Face> faces = new ArrayList<Face>();
     private List<Vertex> normals = new ArrayList<Vertex>();
     private Map<String, Material> materials = new HashMap<String, Material>();
+    private List<float[]> texCoords = new ArrayList<float[]>();
     private class Material {
         private String name;
         private float [] ambient,diffuse,specular;
@@ -48,7 +52,11 @@ public class Model {
     private class Face {
         private Vertex a,b,c,an,bn,cn;
         private Material mtl;
-        public Face(Material mtl, Vertex a, Vertex b, Vertex c, Vertex an, Vertex bn, Vertex cn) {
+        private float[] at, bt, ct;
+        public Face(Material mtl,
+                    Vertex a, Vertex b, Vertex c,
+                    Vertex an, Vertex bn, Vertex cn,
+                    float[] at, float[] bt, float[] ct) {
             this.mtl=mtl;
             this.a=a;
             this.b=b;
@@ -56,6 +64,9 @@ public class Model {
             this.an=an;
             this.bn=bn;
             this.cn=cn;
+            this.at = at;
+            this.bt = bt;
+            this.ct = ct;
         }
         public Material getMtl() {
             return mtl;
@@ -80,12 +91,26 @@ public class Model {
         public Vertex getCn() {
             return cn;
         }
+
+        public float[] getAt() {
+            return at;
+        }
+
+        public float[] getBt() {
+            return bt;
+        }
+
+        public float[] getCt() {
+            return ct;
+        }
     }
     public void draw(GL2 gl, float x, float y, float z, float direction) {
         gl.glLoadIdentity();
         gl.glRotatef(direction, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(x,y,z);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glBegin(GL2.GL_TRIANGLES);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
         float [] color = {1.0f,1.0f,1.0f,1.0f};
         for(Face face: faces) {
             Material material = face.getMtl();
@@ -100,13 +125,17 @@ public class Model {
             Vertex normalC = face.getCn();
 
             gl.glNormal3f(normalA.getX(), normalA.getY(), normalA.getZ());
+            gl.glTexCoord2d(face.getAt()[0], face.getAt()[1]);
             gl.glVertex3f(vertexA.getX(), vertexA.getY(), vertexA.getZ());
             gl.glNormal3f(normalB.getX(), normalB.getY(), normalB.getZ());
+            gl.glTexCoord2d(face.getBt()[0], face.getBt()[1]);
             gl.glVertex3f(vertexB.getX(), vertexB.getY(), vertexB.getZ());
             gl.glNormal3f(normalC.getX(), normalC.getY(), normalC.getZ());
+            gl.glTexCoord2d(face.getCt()[0], face.getCt()[1]);
             gl.glVertex3f(vertexC.getX(), vertexC.getY(), vertexC.getZ());
         }
         gl.glEnd();
+        gl.glDisable(GL2.GL_TEXTURE_2D);
     }
 
     private List<Integer> getIntParts(String token) {
@@ -137,18 +166,24 @@ public class Model {
 
     private void readFace(Scanner s, String mtlName) {
         String a = s.next();
-        List<Integer> aParts = getIntParts(a);
         String b = s.next();
-        List<Integer> bParts = getIntParts(b);
         String c = s.next();
-        List<Integer> cParts = getIntParts(c);
-        Vertex vertexA = vertices.get(aParts.get(0)-1);
-        Vertex vertexB = vertices.get(bParts.get(0)-1);
-        Vertex vertexC = vertices.get(cParts.get(0)-1);
-        Vertex normalA = normals.get(aParts.get(1)-1);
-        Vertex normalB = normals.get(bParts.get(1)-1);
-        Vertex normalC = normals.get(cParts.get(1)-1);
-        faces.add(new Face(materials.get(mtlName),vertexA,vertexB,vertexC,normalA,normalB,normalC));
+        String[] aParts = a.split("/");
+        String[] bParts = b.split("/");
+        String[] cParts = c.split("/");
+        Vertex vertexA = vertices.get(Integer.parseInt(aParts[0])-1);
+        Vertex vertexB = vertices.get(Integer.parseInt(bParts[0])-1);
+        Vertex vertexC = vertices.get(Integer.parseInt(cParts[0])-1);
+        Vertex normalA = normals.get(Integer.parseInt(aParts[2])-1);
+        Vertex normalB = normals.get(Integer.parseInt(bParts[2])-1);
+        Vertex normalC = normals.get(Integer.parseInt(cParts[2])-1);
+        float[] texA = texCoords.get(Integer.parseInt(aParts[1])-1);
+        float[] texB = texCoords.get(Integer.parseInt(bParts[1])-1);
+        float[] texC = texCoords.get(Integer.parseInt(cParts[1])-1);
+        faces.add(new Face(materials.get(mtlName),
+                           vertexA,vertexB,vertexC,
+                           normalA,normalB,normalC,
+                           texA, texB, texC));
     }
 
     private float [] readColor(Scanner s) {
@@ -157,6 +192,13 @@ public class Model {
         float b = s.nextFloat();
         float [] color = {r,g,b,1};
         return color;
+    }
+
+    private void readTexCoord(Scanner s) {
+        float u = s.nextFloat();
+        float v = s.nextFloat();
+        float[] texCoord = { u, v };
+        texCoords.add(texCoord);
     }
 
     private void readMaterial(String mn, Scanner ms) {
@@ -212,7 +254,8 @@ public class Model {
         }
     }
 
-    public Model(String filename){
+    public Model(String filename, GL2 gl, int texId){
+        this.texId = texId;
         System.out.println("Loading file " + filename + "...");
         File file;
         Scanner s = null;
@@ -232,6 +275,8 @@ public class Model {
                readVertex(ls);
             } else if(firstToken.equals("vn")) {
                readNormal(ls);
+            } else if(firstToken.equals("vt")) {
+                readTexCoord(ls);
             } else if(firstToken.equals("f")) {
                 readFace(ls, mfu);
             } else if(firstToken.equals("mtllib")) {
@@ -240,5 +285,18 @@ public class Model {
                 mfu = ls.next();
             }
         }  
+
+        // int[] tmp = new int[1];
+        // gl.glGenTextures(1, tmp, 0);
+        // texId = tmp[0];
+        System.out.println("binding to " + texId);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
+        try {
+            Texture tex = TextureIO.newTexture(new File("Militia-Texture.jpg"), true);
+            tex.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+            tex.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

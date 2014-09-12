@@ -4,6 +4,11 @@ import javax.media.opengl.*;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.*;
 import com.jogamp.opengl.util.FPSAnimator;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -18,6 +23,8 @@ public class ThreeDimensionalTest implements GLEventListener {
     private float dy = 0.0f;
     private float cx,cy,cz = 0.0f;
     private float cDirection = 90.0f;
+    private Texture tex1;
+    private int mapTexId;
     public Set<Integer> getKeySet(){
         return keySet;
     }
@@ -55,7 +62,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         map.draw(gl,cx,cy,cz,(cDirection-90));
         roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
 
-        model.draw(gl, 0.0f - cx, -2.7f - cy, -10.0f - cz, -(cDirection-90));
+        model.draw(gl, 0.0f - cx, 0.0f - cy, -10.0f - cz, -(cDirection-90));
         if(keySet.contains(KeyEvent.VK_A)){
             cDirection += 5.0f;
         }
@@ -143,10 +150,22 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, zero, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-        model = new Model("test.obj");
-        map = new TDMap("Maze.map");
-        roofFloor = new TDMap("RoofFloor.map");
-        
+        int[] tmp = new int[2];
+        gl.glGenTextures(2, tmp, 0);
+        mapTexId = tmp[0];
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, mapTexId);
+        try {
+            tex1 = TextureIO.newTexture(new File("greybrickwall000.png"), true);
+            tex1.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+            tex1.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        map = new TDMap("Maze.map", mapTexId);
+        roofFloor = new TDMap("RoofFloor.map", mapTexId);
+        model = new Model("test.obj", gl, tmp[1]);
+        System.out.println("mapTexId: " + mapTexId);
+        System.out.println("tmp[1]: " + tmp[1]);
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 
         GL2 gl = glDrawable.getGL().getGL2();
