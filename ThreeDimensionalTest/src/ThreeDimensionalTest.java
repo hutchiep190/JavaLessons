@@ -6,18 +6,24 @@ import javax.media.opengl.fixedfunc.*;
 import com.jogamp.opengl.util.FPSAnimator;
 import java.util.Set;
 import java.util.HashSet;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+import java.io.File;
+import java.io.IOException;
 
 public class ThreeDimensionalTest implements GLEventListener {
     private Set<Integer> keySet = new HashSet<Integer>();
     private Model model;
     private TDMap map;
     private TDMap roofFloor;
+    private TDMap floor;
     private float x = 0.0f;
     private float y = 0.0f;
     private float z = 0.0f;
     private float dy = 0.0f;
     private float cx,cy,cz = 0.0f;
     private float cDirection = 90.0f;
+    private Texture stoneBrick;
     public Set<Integer> getKeySet(){
         return keySet;
     }
@@ -146,6 +152,18 @@ public class ThreeDimensionalTest implements GLEventListener {
         model = new Model("test.obj");
         map = new TDMap("Maze.map");
         roofFloor = new TDMap("RoofFloor.map");
+        floor = new TDMap("Floor.map");
+         int[] tmp = new int[1];
+        gl.glGenTextures(1, tmp, 0);
+        int texId = tmp[0];
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
+        try {
+            stoneBrick = TextureIO.newTexture(new File("greybrickwall000.png"), true);
+            stoneBrick.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+            stoneBrick.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 

@@ -73,8 +73,7 @@ public class Model {
             return an;
         }
 
-        public Vertex getBn() {
-            return bn;
+        public Vertex getBn() {            return bn;
         }
 
         public Vertex getCn() {
