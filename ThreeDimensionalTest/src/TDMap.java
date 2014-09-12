@@ -44,9 +44,8 @@ public class TDMap {
         gl.glRotatef(direction,0.0f,1.0f,0.0f);
         gl.glTranslatef(x,y,z);
         gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
         gl.glBegin(GL2.GL_QUADS);
-        // gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 1);
 
         gl.glNormal3f(0.0f,0.0f,1.0f);
         gl.glColor3f(1.0f, 0.5f, 0.0f);

@@ -1,9 +1,11 @@
-import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureIO;
+import com.jogamp.common.nio.Buffers;
 import java.util.*;
 import java.io.*;
 import javax.media.opengl.*;
 import javax.media.opengl.fixedfunc.*;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import javax.imageio.ImageIO;
 
 public class Model {
     private int angle = 0;
@@ -109,8 +111,8 @@ public class Model {
         gl.glRotatef(direction, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(x,y,z);
         gl.glEnable(GL2.GL_TEXTURE_2D);
-        gl.glBegin(GL2.GL_TRIANGLES);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
+        gl.glBegin(GL2.GL_TRIANGLES);
         float [] color = {1.0f,1.0f,1.0f,1.0f};
         for(Face face: faces) {
             Material material = face.getMtl();
@@ -254,7 +256,7 @@ public class Model {
         }
     }
 
-    public Model(String filename, GL2 gl, int texId){
+    public Model(String filename, GL2 gl){
         this.texId = texId;
         System.out.println("Loading file " + filename + "...");
         File file;
@@ -286,17 +288,6 @@ public class Model {
             }
         }  
 
-        // int[] tmp = new int[1];
-        // gl.glGenTextures(1, tmp, 0);
-        // texId = tmp[0];
-        System.out.println("binding to " + texId);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
-        try {
-            Texture tex = TextureIO.newTexture(new File("Militia-Texture.jpg"), true);
-            tex.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
-            tex.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        texId = Utils.loadTexture(gl, "Militia-Texture.jpg");
     }
 }
