@@ -8,6 +8,7 @@ public class Model {
     private List<Vertex> vertices = new ArrayList<Vertex>();
     private List<Face> faces = new ArrayList<Face>();
     private List<Vertex> normals = new ArrayList<Vertex>();
+    private List<float[]> texCoords = new ArrayList<float[]>();
     private Map<String, Material> materials = new HashMap<String, Material>();
     private class Material {
         private String name;
@@ -47,8 +48,9 @@ public class Model {
     }
     private class Face {
         private Vertex a,b,c,an,bn,cn;
+        private float [] at,bt,ct;
         private Material mtl;
-        public Face(Material mtl, Vertex a, Vertex b, Vertex c, Vertex an, Vertex bn, Vertex cn) {
+        public Face(Material mtl, Vertex a, Vertex b, Vertex c, Vertex an, Vertex bn, Vertex cn, float [] at, float [] bt, float [] ct) {
             this.mtl=mtl;
             this.a=a;
             this.b=b;
@@ -56,6 +58,9 @@ public class Model {
             this.an=an;
             this.bn=bn;
             this.cn=cn;
+            this.at=at;
+            this.bt=bt;
+            this.ct=ct;
         }
         public Material getMtl() {
             return mtl;
@@ -72,13 +77,22 @@ public class Model {
         public Vertex getAn() {
             return an;
         }
-
-        public Vertex getBn() {            return bn;
+        public Vertex getBn() {            
+            return bn;
         }
-
         public Vertex getCn() {
             return cn;
         }
+        public float[] getAt() {
+            return at;
+        }
+        public float[] getBt() {
+            return bt;
+        }
+        public float[] getCt() {
+            return ct;
+        }
+
     }
     public void draw(GL2 gl, float x, float y, float z, float direction) {
         gl.glLoadIdentity();
@@ -136,18 +150,24 @@ public class Model {
 
     private void readFace(Scanner s, String mtlName) {
         String a = s.next();
-        List<Integer> aParts = getIntParts(a);
         String b = s.next();
-        List<Integer> bParts = getIntParts(b);
         String c = s.next();
-        List<Integer> cParts = getIntParts(c);
-        Vertex vertexA = vertices.get(aParts.get(0)-1);
-        Vertex vertexB = vertices.get(bParts.get(0)-1);
-        Vertex vertexC = vertices.get(cParts.get(0)-1);
-        Vertex normalA = normals.get(aParts.get(1)-1);
-        Vertex normalB = normals.get(bParts.get(1)-1);
-        Vertex normalC = normals.get(cParts.get(1)-1);
-        faces.add(new Face(materials.get(mtlName),vertexA,vertexB,vertexC,normalA,normalB,normalC));
+        String [] aArray = a.split("/");
+        String [] bArray = b.split("/");
+        String [] cArray = c.split("/");
+        Vertex vertexA = vertices.get(Integer.parseInt(aArray[0])-1);
+        Vertex vertexB = vertices.get(Integer.parseInt(bArray[0])-1);
+        Vertex vertexC = vertices.get(Integer.parseInt(cArray[0])-1);
+        float [] texCoordsA = texCoords.get(Integer.parseInt(aArray[1])-1);
+        float [] texCoordsB = texCoords.get(Integer.parseInt(bArray[1])-1);
+        float [] texCoordsC = texCoords.get(Integer.parseInt(cArray[1])-1);
+        Vertex normalA = normals.get(Integer.parseInt(aArray[2])-1);
+        Vertex normalB = normals.get(Integer.parseInt(bArray[2])-1);
+        Vertex normalC = normals.get(Integer.parseInt(cArray[2])-1);
+        faces.add(new Face(materials.get(mtlName),
+                           vertexA,vertexB,vertexC,
+                           normalA,normalB,normalC,
+                           texCoordsA,texCoordsB,texCoordsC));
     }
 
     private float [] readColor(Scanner s) {
@@ -210,6 +230,14 @@ public class Model {
             }
         }
     }
+    private void readTexCoord(Scanner s) {
+        float u = s.nextFloat();
+        float v = s.nextFloat();
+        float [] uv = new float[2];
+        uv[0] = u;
+        uv[1] = v;
+        texCoords.add(uv);
+    }
 
     public Model(String filename){
         System.out.println("Loading file " + filename + "...");
@@ -237,6 +265,8 @@ public class Model {
                 readMaterials(ls);
             } else if(firstToken.equals("usemtl")) {
                 mfu = ls.next();
+            } else if(firstToken.equals("vt")) {
+                readTexCoord(ls);
             }
         }  
     }

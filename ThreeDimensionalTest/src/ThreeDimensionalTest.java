@@ -149,7 +149,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, zero, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-        model = new Model("test.obj");
+        model = new Model("Militia2.obj");
         map = new TDMap("Maze.map");
         roofFloor = new TDMap("RoofFloor.map");
         floor = new TDMap("Floor.map");
