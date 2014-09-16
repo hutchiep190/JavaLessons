@@ -4,6 +4,7 @@ import javax.media.opengl.*;
 import javax.media.opengl.fixedfunc.*;
 
 public class Model {
+    private int texId = 0;
     private int angle = 0;
     private List<Vertex> vertices = new ArrayList<Vertex>();
     private List<Face> faces = new ArrayList<Face>();
@@ -98,6 +99,8 @@ public class Model {
         gl.glLoadIdentity();
         gl.glRotatef(direction, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(x,y,z);
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
         gl.glBegin(GL2.GL_TRIANGLES);
         float [] color = {1.0f,1.0f,1.0f,1.0f};
         for(Face face: faces) {
@@ -111,15 +114,22 @@ public class Model {
             Vertex normalA = face.getAn();
             Vertex normalB = face.getBn();
             Vertex normalC = face.getCn();
+            float[] texCoordsA = face.getAt();
+            float[] texCoordsB = face.getBt();
+            float[] texCoordsC = face.getCt();
 
             gl.glNormal3f(normalA.getX(), normalA.getY(), normalA.getZ());
+            gl.glTexCoord2d(texCoordsA[0],texCoordsA[1]);
             gl.glVertex3f(vertexA.getX(), vertexA.getY(), vertexA.getZ());
             gl.glNormal3f(normalB.getX(), normalB.getY(), normalB.getZ());
+            gl.glTexCoord2d(texCoordsB[0],texCoordsB[1]);
             gl.glVertex3f(vertexB.getX(), vertexB.getY(), vertexB.getZ());
             gl.glNormal3f(normalC.getX(), normalC.getY(), normalC.getZ());
+            gl.glTexCoord2d(texCoordsC[0],texCoordsC[1]);
             gl.glVertex3f(vertexC.getX(), vertexC.getY(), vertexC.getZ());
         }
         gl.glEnd();
+        gl.glDisable(GL2.GL_TEXTURE_2D);
     }
 
     private List<Integer> getIntParts(String token) {
@@ -239,7 +249,7 @@ public class Model {
         texCoords.add(uv);
     }
 
-    public Model(String filename){
+    public Model(String filename, GL2 gl){
         System.out.println("Loading file " + filename + "...");
         File file;
         Scanner s = null;
@@ -269,5 +279,6 @@ public class Model {
                 readTexCoord(ls);
             }
         }  
+        texId = Utils.loadTexture(gl, "Militia-Texture.jpg");
     }
 }

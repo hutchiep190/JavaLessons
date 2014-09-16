@@ -17,6 +17,7 @@ public class ThreeDimensionalTest implements GLEventListener {
     private TDMap map;
     private TDMap roofFloor;
     private TDMap floor;
+    private int loadedTexture = 0;
     private float x = 0.0f;
     private float y = 0.0f;
     private float z = 0.0f;
@@ -55,13 +56,15 @@ public class ThreeDimensionalTest implements GLEventListener {
         GL2 gl = glDrawable.getGL().getGL2();
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, loadedTexture);
+
         roofFloor.draw(gl,cx,cy-3,cz,(cDirection-90));
         map.draw(gl,cx,cy-2,cz,(cDirection-90));
         map.draw(gl,cx,cy-1,cz,(cDirection-90));
         map.draw(gl,cx,cy,cz,(cDirection-90));
         roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
 
-        model.draw(gl, 0.0f - cx, -2.7f - cy, -10.0f - cz, -(cDirection-90));
+        model.draw(gl, 0.0f - cx, -0.0f - cy, -10.0f - cz, -(cDirection-90));
         if(keySet.contains(KeyEvent.VK_A)){
             cDirection += 5.0f;
         }
@@ -149,11 +152,11 @@ public class ThreeDimensionalTest implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, zero, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-        model = new Model("Militia2.obj");
+        model = new Model("Militia2.obj", gl);
         map = new TDMap("Maze.map");
         roofFloor = new TDMap("RoofFloor.map");
         floor = new TDMap("Floor.map");
-         int[] tmp = new int[1];
+        /* int[] tmp = new int[1];
         gl.glGenTextures(1, tmp, 0);
         int texId = tmp[0];
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
@@ -164,6 +167,8 @@ public class ThreeDimensionalTest implements GLEventListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
+        loadedTexture = Utils.loadTexture(gl, "greybrickwall000.png");
         
     }
     public void reshape(GLAutoDrawable glDrawable, int x, int y, int width, int height){ 
