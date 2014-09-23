@@ -26,6 +26,14 @@ public class TDMap {
             buildData.add(mapLineIntegers);
         }
     }
+    public boolean cubeHere(float x, float z){
+        if(x < 0 || z < 0 || z > buildData.size()-1 || x > buildData.get(0).size()-1){
+            return false;
+        }
+        int row = (int)Math.floor(z);
+        int col = (int)Math.floor(x);
+         return buildData.get(row).get(col) == 1;
+    }
     public void draw(GL2 gl, float cx, float cy, float cz, float cDirection){
         for(int i = 0; i < buildData.size(); i++){
            List<Integer> list = buildData.get(i);

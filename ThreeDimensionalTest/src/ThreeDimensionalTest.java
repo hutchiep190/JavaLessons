@@ -54,6 +54,10 @@ public class ThreeDimensionalTest implements GLEventListener {
     
     public void display(GLAutoDrawable glDrawable){
         GL2 gl = glDrawable.getGL().getGL2();
+        draw(gl);
+        update();
+    }
+    private void draw(GL2 gl) {
         gl.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         
         gl.glBindTexture(GL2.GL_TEXTURE_2D, loadedTexture);
@@ -65,6 +69,10 @@ public class ThreeDimensionalTest implements GLEventListener {
         roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
 
         model.draw(gl, 0.0f - cx, -0.0f - cy, -10.0f - cz, -(cDirection-90));
+    }
+    private void update(){
+        float oldX = x;
+        float oldZ = z;
         if(keySet.contains(KeyEvent.VK_A)){
             cDirection += 5.0f;
         }
@@ -133,6 +141,10 @@ public class ThreeDimensionalTest implements GLEventListener {
         y = y + dy;
         if(y < -0.0f){
             y = -0.0f;
+        }
+        if(map.cubeHere(x,z)){
+            x = oldX;
+            z = oldZ;
         }
         cx=x;
         cy=y+2;
