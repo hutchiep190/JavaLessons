@@ -33,4 +33,19 @@ public class LinkedList{
             link.remove(index-1);
         }
     }
+    public boolean contains(int data){
+        if(link == null){ 
+            return false;
+        }
+        if(data == link.data){
+            return true;
+        }
+        return link.contains(data); 
+    }
+    public String toString(){
+        if(link == null){
+            return "|";
+        }
+        return "|"+link.data+link.toString();
+    }
 }
