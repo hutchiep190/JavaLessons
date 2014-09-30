@@ -137,19 +137,29 @@ public class ThreeDimensionalTest implements GLEventListener {
                 }
             }
         }
+        float direction = entity.getDirection();
         if(keySet.contains(KeyEvent.VK_Y)){
-            entity.setDz(0.1f);
+            // entity.setDz(0.1f);
+            entity.setDx((float)-Math.cos((double)direction*Math.PI/180)*0.2f);
+            entity.setDz((float)Math.sin((double)direction*Math.PI/180)*0.2f);
         }else if(keySet.contains(KeyEvent.VK_H)){
-            entity.setDz(-0.1f);
+            // entity.setDz(-0.1f);
+            entity.setDx((float)Math.cos((double)direction*Math.PI/180)*0.2f);
+            entity.setDz((float)-Math.sin((double)direction*Math.PI/180)*0.2f);
         }else{
-            entity.setDz(0);
+            // entity.setDz(0);
+            entity.setDx(0.0f);
+            entity.setDz(0.0f);
         } 
         if(keySet.contains(KeyEvent.VK_J)){
-            entity.setDx(0.1f);
+            // entity.setDx(0.1f);
+            entity.setDtheta(-2.0f);
         }else if(keySet.contains(KeyEvent.VK_G)){
-            entity.setDx(-0.1f);
+            // entity.setDx(-0.1f);
+            entity.setDtheta(2.0f);
         }else{
-            entity.setDx(0);
+            // entity.setDx(0);
+            entity.setDtheta(0);
         }
         entity.update(map);
 
@@ -184,7 +194,9 @@ public class ThreeDimensionalTest implements GLEventListener {
         map = new TDMap("Maze.map");
         roofFloor = new TDMap("RoofFloor.map");
         floor = new TDMap("Floor.map");
-        entity = new Entity(model, 4.0f, 0.0f, -9.0f, 0.0f);
+        entity = new Entity(model, 4.0f, 0.0f, -9.0f,
+                            -1.0f, 0.0f, -1.0f, 
+                            1.5f, 3.0f, 1.5f, 90.0f);
 
         z = cz = -10;
         cDirection = 270;
