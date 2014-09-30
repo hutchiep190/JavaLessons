@@ -40,4 +40,44 @@ public class Utils {
                         imgHeight, 0, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, imgBuf);
         return tmp[0];
     }
+
+    public static void drawBoundingBox(GL2 gl, float x1, float y1, float z1,
+                                       float x2, float y2, float z2,
+                                       float x, float y, float z,
+                                       float cDirection,
+                                       float direction,
+                                       float r, float g, float b) {
+        gl.glLoadIdentity();
+        gl.glRotatef(cDirection, 0.0f, 1.0f, 0.0f);
+        gl.glTranslatef(x,y,z);
+        gl.glRotatef(direction - 90.0f, 0.0f, 1.0f, 0.0f);
+        gl.glDisable(GL2.GL_LIGHTING);
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glColor3f(r, g, b);
+
+        gl.glVertex3f(x1, y1, z1);
+        gl.glVertex3f(x2, y1, z1);
+        gl.glVertex3f(x2, y1, z2);
+        gl.glVertex3f(x1, y1, z2);
+
+        gl.glVertex3f(x1, y2, z1);
+        gl.glVertex3f(x2, y2, z1);
+        gl.glVertex3f(x2, y2, z2);
+        gl.glVertex3f(x1, y2, z2);
+
+        gl.glVertex3f(x1, y1, z1);
+        gl.glVertex3f(x1, y2, z1);
+        gl.glVertex3f(x1, y2, z2);
+        gl.glVertex3f(x1, y1, z2);
+
+        gl.glVertex3f(x2, y1, z1);
+        gl.glVertex3f(x2, y2, z1);
+        gl.glVertex3f(x2, y2, z2);
+        gl.glVertex3f(x2, y1, z2);
+
+        gl.glEnd();
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+        gl.glEnable(GL2.GL_LIGHTING);
+    }
 }

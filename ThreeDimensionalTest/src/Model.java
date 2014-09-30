@@ -6,6 +6,7 @@ import javax.media.opengl.fixedfunc.*;
 public class Model {
     private int texId = 0;
     private int angle = 0;
+    private float rot = 0.0f;
     private List<Vertex> vertices = new ArrayList<Vertex>();
     private List<Face> faces = new ArrayList<Face>();
     private List<Vertex> normals = new ArrayList<Vertex>();
@@ -95,10 +96,11 @@ public class Model {
         }
 
     }
-    public void draw(GL2 gl, float x, float y, float z, float direction) {
+    public void draw(GL2 gl, float x, float y, float z, float cDirection, float direction) {
         gl.glLoadIdentity();
-        gl.glRotatef(direction, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(cDirection, 0.0f, 1.0f, 0.0f);
         gl.glTranslatef(x,y,z);
+        gl.glRotatef(direction - 90.0f, 0.0f, 1.0f, 0.0f);
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
         gl.glBegin(GL2.GL_TRIANGLES);
@@ -130,6 +132,26 @@ public class Model {
         }
         gl.glEnd();
         gl.glDisable(GL2.GL_TEXTURE_2D);
+    }
+
+    public void drawWithBoundingBox(GL2 gl, float x, float y, float z, float cDirection, float direction) {
+        float minX = vertices.get(0).getX();
+        float minY = vertices.get(0).getY();
+        float minZ = vertices.get(0).getZ();
+        float maxX = vertices.get(0).getX();
+        float maxY = vertices.get(0).getY();
+        float maxZ = vertices.get(0).getZ();
+        for (Vertex v : vertices) {
+            if (v.getX() < minX) minX = v.getX();
+            if (v.getY() < minY) minY = v.getY();
+            if (v.getZ() < minZ) minZ = v.getZ();
+            if (v.getX() > maxX) maxX = v.getX();
+            if (v.getY() > maxY) maxY = v.getY();
+            if (v.getZ() > maxZ) maxZ = v.getZ();
+        }
+        draw(gl, x, y, z, cDirection, direction);
+
+        Utils.drawBoundingBox(gl, minX, minY, minZ, maxX, maxY, maxZ, x, y, z, cDirection, direction, 1.0f, 1.0f, 1.0f);
     }
 
     private List<Integer> getIntParts(String token) {
