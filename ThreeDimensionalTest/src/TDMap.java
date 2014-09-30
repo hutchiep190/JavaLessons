@@ -26,6 +26,28 @@ public class TDMap {
             buildData.add(mapLineIntegers);
         }
     }
+    public boolean collision(float x1, float y1, float z1, float w1, float h1, float d1,
+                             float x2, float y2, float z2, float w2, float h2, float d2){
+        if(x1+w1<=x2 || x2+w2<=x1 || y1+h1<=y2 || y2+h2<=y1 || z1+d1<=z2 || z2+d2<=z1){
+            return false;
+        }else{
+            return true;}
+        }
+    public boolean collision(float x, float y, float z, float width, float height, float depth){
+        for(int i = 0; i < buildData.size(); i++){
+           List<Integer> list = buildData.get(i);
+           for(int j = 0; j < list.size(); j++){
+                int value = list.get(j);
+                if(value == 1){
+                    if( collision(x,y,z,width,height,depth,
+                                     j,0.0f,i,1,1,1)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     public boolean cubeHere(float x, float z){
         if(x < 0 || z < 0 || z > buildData.size()-1 || x > buildData.get(0).size()-1){
             return false;

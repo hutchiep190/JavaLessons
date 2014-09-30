@@ -17,6 +17,7 @@ public class ThreeDimensionalTest implements GLEventListener {
     private TDMap map;
     private TDMap roofFloor;
     private TDMap floor;
+    private Entity entity;
     private int loadedTexture = 0;
     private float x = 0.0f;
     private float y = 0.0f;
@@ -68,7 +69,7 @@ public class ThreeDimensionalTest implements GLEventListener {
         map.draw(gl,cx,cy,cz,(cDirection-90));
         roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
 
-        model.draw(gl, 0.0f - cx, -0.0f - cy, -10.0f - cz, -(cDirection-90));
+        entity.draw(gl,cx,cy,cz,cDirection);
     }
     private void update(){
         float oldX = x;
@@ -136,6 +137,21 @@ public class ThreeDimensionalTest implements GLEventListener {
                 }
             }
         }
+        if(keySet.contains(KeyEvent.VK_Y)){
+            entity.setDz(0.1f);
+        }else if(keySet.contains(KeyEvent.VK_H)){
+            entity.setDz(-0.1f);
+        }else{
+            entity.setDz(0);
+        } 
+        if(keySet.contains(KeyEvent.VK_J)){
+            entity.setDx(0.1f);
+        }else if(keySet.contains(KeyEvent.VK_G)){
+            entity.setDx(-0.1f);
+        }else{
+            entity.setDx(0);
+        }
+        entity.update(map);
 
         dy -= 0.1f;
         y = y + dy;
@@ -168,18 +184,11 @@ public class ThreeDimensionalTest implements GLEventListener {
         map = new TDMap("Maze.map");
         roofFloor = new TDMap("RoofFloor.map");
         floor = new TDMap("Floor.map");
-        /* int[] tmp = new int[1];
-        gl.glGenTextures(1, tmp, 0);
-        int texId = tmp[0];
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
-        try {
-            stoneBrick = TextureIO.newTexture(new File("greybrickwall000.png"), true);
-            stoneBrick.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
-            stoneBrick.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
+        entity = new Entity(model, 4.0f, 0.0f, -9.0f, 0.0f);
+
+        z = cz = -10;
+        cDirection = 270;
+
         loadedTexture = Utils.loadTexture(gl, "greybrickwall000.png");
         
     }
