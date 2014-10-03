@@ -48,4 +48,11 @@ public class LinkedList{
         }
         return "|"+link.data+link.toString();
     }
+    public int sum(){
+        if (link == null){
+            return 0;
+        }
+        return link.sum() + link.data;
+
+    }
 }

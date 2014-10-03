@@ -15,5 +15,6 @@ public class LinkedListTest{
        System.out.println("The fact that the list contains 21 is: " + list.contains(21) + ".");
        System.out.println("The fact that the list contains 300 is: " + list.contains(300) + ".");
        System.out.println(list);
+       System.out.println("The list's sum is " + list.sum() + ".");
     }
 }
