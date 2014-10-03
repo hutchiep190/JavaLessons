@@ -1,6 +1,6 @@
 public class LinkedListTest{
     public static void main(String[] args) {
-        LinkedList list = new LinkedList();
+        List list = new ArrayList();
         list.add(12);
         System.out.println("First element is " + list.get(0) + ".");
         list.add(9);

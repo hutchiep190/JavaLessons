@@ -1,4 +1,4 @@
-public class LinkedList{
+public class LinkedList implements List {
     private LinkedList link;
     private int data;
     public LinkedList(){
