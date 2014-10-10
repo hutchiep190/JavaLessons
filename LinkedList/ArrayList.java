@@ -21,7 +21,8 @@ public class ArrayList implements List {
         return len;
     }
     public void remove(int index){
-
+        System.arraycopy(data,index+1,data,index,len-index-1);
+        len-=1;
     }
     public boolean contains(int data){
         return false;
