@@ -20,6 +20,7 @@ public class ThreeDimensionalTest implements GLEventListener {
     private TDMap floor;
     private Entity entity;
     private int loadedTexture = 0;
+    public static boolean topView = true;
     private float x = 0.0f;
     private float y = 0.0f;
     private float z = 0.0f;
@@ -167,6 +168,10 @@ public class ThreeDimensionalTest implements GLEventListener {
         if(keySet.contains(KeyEvent.VK_1)&&!prevKeySet.contains(KeyEvent.VK_1)){
             birdsEyeView = !birdsEyeView;
         }
+
+        if(keySet.contains(KeyEvent.VK_2)&&!prevKeySet.contains(KeyEvent.VK_2)){
+            topView = !topView;
+        }
         
         prevKeySet = (Set<Integer>)((HashSet)keySet).clone();
         
@@ -181,13 +186,18 @@ public class ThreeDimensionalTest implements GLEventListener {
             x = oldX;
             z = oldZ;
         }
-        cx=x;
-        if(birdsEyeView){
-            cy=y+10;
-        }else{
-            cy=y+2;
+        if (!topView) {
+            cx=x;
+            if(birdsEyeView){
+                cy=y+10;
+            }else{
+                cy=y+2;
+            }
+            cz=z;
+        } else {
+            x = cx = entity.getX();
+            z = cz = entity.getZ();
         }
-        cz=z;
     }
 
     public void init(GLAutoDrawable glDrawable){

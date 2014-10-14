@@ -24,10 +24,20 @@ public class Entity{
         this.direction=direction;
     }
     public void draw(GL2 gl, float cx, float cy, float cz, float cDirection){
-        model.drawWithBoundingBox(gl, x - cx, y - cy, z - cz,  -(cDirection-90), direction);
-        Utils.drawBoundingBox(gl, x+xoff, y+yoff, z+zoff,
-                              x+xoff+width, y+yoff+height, z+zoff+depth,
-                              -cx, -cy, -cz, -(cDirection-90), 90.0f, 1.0f, 0.0f, 0.0f);
+        if (ThreeDimensionalTest.topView) {
+            model.drawWithBoundingBox(gl, x - cx, y, z - cz,  -(cDirection-90), direction);
+        } else {
+            model.drawWithBoundingBox(gl, x - cx, y - cy, z - cz,  -(cDirection-90), direction);
+        }
+        if (ThreeDimensionalTest.topView) {
+            Utils.drawBoundingBox(gl, x+xoff, y+yoff, z+zoff,
+                                  x+xoff+width, y+yoff+height, z+zoff+depth,
+                                  -cx, -20, -cz, -(cDirection-90), 90.0f, 1.0f, 0.0f, 0.0f);
+        } else {
+            Utils.drawBoundingBox(gl, x+xoff, y+yoff, z+zoff,
+                                  x+xoff+width, y+yoff+height, z+zoff+depth,
+                                  -cx, -cy, -cz, -(cDirection-90), 90.0f, 1.0f, 0.0f, 0.0f);
+        }
     }
     public float getDirection() {
         return direction;
@@ -42,6 +52,8 @@ public class Entity{
             z -= dz;
         }
     }
+    public float getX() { return x; }
+    public float getZ() { return z; }
     public void setDz(float newDz) {
         dz = newDz;
     }
