@@ -48,7 +48,11 @@ public class Utils {
                                        float direction,
                                        float r, float g, float b) {
         gl.glLoadIdentity();
-        gl.glRotatef(cDirection, 0.0f, 1.0f, 0.0f);
+        if (ThreeDimensionalTest.topView) {
+            gl.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        } else {
+            gl.glRotatef(cDirection, 0.0f, 1.0f, 0.0f);
+        }
         gl.glTranslatef(x,y,z);
         gl.glRotatef(direction - 90.0f, 0.0f, 1.0f, 0.0f);
         gl.glDisable(GL2.GL_LIGHTING);

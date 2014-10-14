@@ -58,19 +58,31 @@ public class TDMap {
     }
     public void draw(GL2 gl, float cx, float cy, float cz, float cDirection){
         for(int i = 0; i < buildData.size(); i++){
-           List<Integer> list = buildData.get(i);
-           for(int j = 0; j < list.size(); j++){
+            List<Integer> list = buildData.get(i);
+            for(int j = 0; j < list.size(); j++){
                 int value = list.get(j);
                 if(value == 1){
-                    drawCube(gl,j-cx,-cy,i-cz,-cDirection);
+                    if (ThreeDimensionalTest.topView) {
+                        drawCube(gl,j-cx,-20,i-cz,-cDirection);
+                    } else {
+                        drawCube(gl,j-cx,-cy,i-cz,-cDirection);
+                    }
                 }
             }
         }
     }
     private void drawCube(GL2 gl, float x, float y, float z, float direction){
         gl.glLoadIdentity();
-        gl.glRotatef(direction,0.0f,1.0f,0.0f);
-        gl.glTranslatef(x,y,z);
+        if (ThreeDimensionalTest.topView) {
+            gl.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        } else {
+            gl.glRotatef(direction,0.0f,1.0f,0.0f);
+        }
+        if (ThreeDimensionalTest.topView) {
+            gl.glTranslatef(x,y,z);
+        } else {
+            gl.glTranslatef(x,y,z);
+        }
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glBegin(GL2.GL_QUADS);
         gl.glNormal3f(0.0f,0.0f,1.0f);

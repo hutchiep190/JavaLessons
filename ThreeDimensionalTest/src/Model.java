@@ -98,9 +98,15 @@ public class Model {
     }
     public void draw(GL2 gl, float x, float y, float z, float cDirection, float direction) {
         gl.glLoadIdentity();
-        gl.glRotatef(cDirection, 0.0f, 1.0f, 0.0f);
-        gl.glTranslatef(x,y,z);
-        gl.glRotatef(direction - 90.0f, 0.0f, 1.0f, 0.0f);
+        if (ThreeDimensionalTest.topView) {
+            gl.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+            gl.glTranslatef(x, y-20.0f, z);
+            gl.glRotatef(direction - 90.0f, 0.0f, 1.0f, 0.0f);
+        } else {
+            gl.glRotatef(cDirection, 0.0f, 1.0f, 0.0f);
+            gl.glTranslatef(x,y,z);
+            gl.glRotatef(direction - 90.0f, 0.0f, 1.0f, 0.0f);
+        }
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, texId);
         gl.glBegin(GL2.GL_TRIANGLES);
@@ -151,7 +157,11 @@ public class Model {
         }
         draw(gl, x, y, z, cDirection, direction);
 
-        Utils.drawBoundingBox(gl, minX, minY, minZ, maxX, maxY, maxZ, x, y, z, cDirection, direction, 1.0f, 1.0f, 1.0f);
+        if (ThreeDimensionalTest.topView) {
+            Utils.drawBoundingBox(gl, minX, minY, minZ, maxX, maxY, maxZ, x, y-20, z, cDirection, direction, 1.0f, 1.0f, 1.0f);
+        } else {
+            Utils.drawBoundingBox(gl, minX, minY, minZ, maxX, maxY, maxZ, x, y, z, cDirection, direction, 1.0f, 1.0f, 1.0f);
+        }
     }
 
     private List<Integer> getIntParts(String token) {
