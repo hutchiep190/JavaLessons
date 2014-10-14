@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class ThreeDimensionalTest implements GLEventListener {
     private Set<Integer> keySet = new HashSet<Integer>();
+    private Set<Integer> prevKeySet = new HashSet<Integer>();
     private Model model;
     private TDMap map;
     private TDMap roofFloor;
@@ -26,6 +27,7 @@ public class ThreeDimensionalTest implements GLEventListener {
     private float cx,cy,cz = 0.0f;
     private float cDirection = 90.0f;
     private Texture stoneBrick;
+    public boolean birdsEyeView = false;
     public Set<Integer> getKeySet(){
         return keySet;
     }
@@ -63,11 +65,11 @@ public class ThreeDimensionalTest implements GLEventListener {
         
         gl.glBindTexture(GL2.GL_TEXTURE_2D, loadedTexture);
 
-        roofFloor.draw(gl,cx,cy-3,cz,(cDirection-90));
-        map.draw(gl,cx,cy-2,cz,(cDirection-90));
-        map.draw(gl,cx,cy-1,cz,(cDirection-90));
+        //roofFloor.draw(gl,cx,cy-3,cz,(cDirection-90));
+        //map.draw(gl,cx,cy-2,cz,(cDirection-90));
+        //map.draw(gl,cx,cy-1,cz,(cDirection-90));
         map.draw(gl,cx,cy,cz,(cDirection-90));
-        roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
+        //roofFloor.draw(gl,cx,cy+1,cz,(cDirection-90));
 
         entity.draw(gl,cx,cy,cz,cDirection);
     }
@@ -161,6 +163,13 @@ public class ThreeDimensionalTest implements GLEventListener {
             // entity.setDx(0);
             entity.setDtheta(0);
         }
+
+        if(keySet.contains(KeyEvent.VK_1)&&!prevKeySet.contains(KeyEvent.VK_1)){
+            birdsEyeView = !birdsEyeView;
+        }
+        
+        prevKeySet = (Set<Integer>)((HashSet)keySet).clone();
+        
         entity.update(map);
 
         dy -= 0.1f;
@@ -173,7 +182,11 @@ public class ThreeDimensionalTest implements GLEventListener {
             z = oldZ;
         }
         cx=x;
-        cy=y+2;
+        if(birdsEyeView){
+            cy=y+10;
+        }else{
+            cy=y+2;
+        }
         cz=z;
     }
 
