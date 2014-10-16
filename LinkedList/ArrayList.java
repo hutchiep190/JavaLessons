@@ -25,12 +25,25 @@ public class ArrayList implements List {
         len-=1;
     }
     public boolean contains(int data){
+        for(int i = 0; i < len; ++i){
+            if(data == this.data[i]){
+                return true;
+            }
+        }
         return false;
     }
     public String toString(){
-        return "";
+        String returnString = "|";
+        for(int i = 0; i < len; ++i){
+            returnString = returnString+data[i]+"|";
+        }
+        return returnString;
     }
     public int sum(){
-        return 0;
+        int sumData = 0;
+        for(int i = 0; i < len; ++i){
+            sumData = data[i] + sumData;
+        }
+        return sumData;
     }
 }    
