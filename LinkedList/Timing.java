@@ -7,37 +7,34 @@ public class Timing {
 
     public static void main(String[] args) {
         ArrayList list = new ArrayList();
+        LinkedList list2 = new LinkedList();
+        
+        timeAdd(list);
+        timeAdd(list2);
+
+        timeRemove(list);
+        timeRemove(list2);
+    }
+
+    public static void timeAdd(List list){
         Date before = new Date();
         addRandomInts(list);
         Date after = new Date();
         System.out.println("It took "
                            + (after.getTime() - before.getTime())
-                           + " milliseconds for add to arrayList " + numberOfInts + " times");
-
-        LinkedList list2 = new LinkedList();
-        Date before2 = new Date();
-        addRandomInts(list2);
-        Date after2 = new Date();
-        System.out.println("It took "
-                           + (after2.getTime() - before2.getTime())
                            + " milliseconds for add to linkedList " + numberOfInts + " times");
+    }
 
-        Date before3 = new Date();
+    public static void timeRemove(List list){
+        Date before = new Date();
         removeInts(list);
-        Date after3 = new Date();
+        Date after = new Date();
         System.out.println("It took "
-                           + (after3.getTime() - before3.getTime())
-                           + " milliseconds for remove from arrayList " + numberOfInts + " times");
-
-        Date before4 = new Date();
-        removeInts(list2);
-        Date after4 = new Date();
-        System.out.println("It took "
-                           + (after4.getTime() - before4.getTime())
+                           + (after.getTime() - before.getTime())
                            + " milliseconds for remove from linkedList " + numberOfInts + " times");
 
     }
-    
+
     public static void addRandomInts(List list){
         for (int i = 0; i < numberOfInts; ++i) {
             list.add(new Random().nextInt());
