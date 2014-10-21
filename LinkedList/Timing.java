@@ -8,9 +8,7 @@ public class Timing {
     public static void main(String[] args) {
         ArrayList list = new ArrayList();
         Date before = new Date();
-        for (int i = 0; i < numberOfInts; ++i) {
-            list.add(new Random().nextInt());
-        }
+        addRandomInts(list);
         Date after = new Date();
         System.out.println("It took "
                            + (after.getTime() - before.getTime())
@@ -18,32 +16,38 @@ public class Timing {
 
         LinkedList list2 = new LinkedList();
         Date before2 = new Date();
-        for (int i = 0; i < numberOfInts; ++i) {
-            list2.add(new Random().nextInt());
-        }
+        addRandomInts(list2);
         Date after2 = new Date();
         System.out.println("It took "
                            + (after2.getTime() - before2.getTime())
                            + " milliseconds for add to linkedList " + numberOfInts + " times");
 
         Date before3 = new Date();
-        for (int i = 0; i < numberOfInts; ++i) {
-            list.remove(0);
-        }
+        removeInts(list);
         Date after3 = new Date();
         System.out.println("It took "
                            + (after3.getTime() - before3.getTime())
                            + " milliseconds for remove from arrayList " + numberOfInts + " times");
 
         Date before4 = new Date();
-        for (int i = 0; i < numberOfInts; ++i) {
-            list2.remove(0);
-        }
+        removeInts(list2);
         Date after4 = new Date();
         System.out.println("It took "
                            + (after4.getTime() - before4.getTime())
                            + " milliseconds for remove from linkedList " + numberOfInts + " times");
 
+    }
+    
+    public static void addRandomInts(List list){
+        for (int i = 0; i < numberOfInts; ++i) {
+            list.add(new Random().nextInt());
+        }
+    }
+
+    public static void removeInts(List list){
+        for (int i = 0; i < numberOfInts; ++i) {
+            list.remove(0);
+        }
     }
 
 }
