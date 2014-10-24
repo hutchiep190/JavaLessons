@@ -55,4 +55,6 @@ public class LinkedList implements List {
         return link.sum() + link.data;
 
     }
+    public void set(int index, int data){
+    }
 }

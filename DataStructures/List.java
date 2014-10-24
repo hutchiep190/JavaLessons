@@ -7,4 +7,5 @@ public interface List{
     public boolean contains(int data);
     public String toString();
     public int sum();
+    public void set(int index, int data);
 }

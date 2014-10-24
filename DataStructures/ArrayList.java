@@ -46,4 +46,7 @@ public class ArrayList implements List {
         }
         return sumData;
     }
+    public void set(int index, int data){
+        this.data[index] = data;
+    }
 }    
