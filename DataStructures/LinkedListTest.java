@@ -16,5 +16,11 @@ public class LinkedListTest{
        System.out.println("The fact that the list contains 300 is: " + list.contains(300) + ".");
        System.out.println(list);
        System.out.println("The list's sum is " + list.sum() + ".");
+       List linkedList = new LinkedList();
+       linkedList.add(30);
+       linkedList.add(24);
+       System.out.println(linkedList);
+       linkedList.set(1, 64);
+       System.out.println(linkedList);
     }
 }

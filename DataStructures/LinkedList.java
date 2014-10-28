@@ -56,5 +56,11 @@ public class LinkedList implements List {
 
     }
     public void set(int index, int data){
+        if(index == 0){
+            link.data = data;
+        }else{
+            link.set(index-1, data);
+        }
+
     }
 }
